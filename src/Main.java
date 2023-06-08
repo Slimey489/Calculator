@@ -14,7 +14,7 @@ public class Main {
     public JFrame  mainFrame(){
         frameMain = new JFrame();
         mainFrameSize = new Dimension(300,300);
-        buttonSize = new Dimension(40,30);
+        buttonSize = new Dimension(60,30);
         objectContainer = frameMain.getContentPane();
         layout = new SpringLayout();
 
@@ -29,20 +29,16 @@ public class Main {
         button8 = new JButton("8");
         button9 = new JButton("9");
 
-        button0.setSize(buttonSize);
-        button1.setSize(buttonSize);
-        button2.setSize(buttonSize);
-        button3.setSize(buttonSize);
-        button4.setSize(buttonSize);
-        button5.setSize(buttonSize);
-        button6.setSize(buttonSize);
-        button7.setSize(buttonSize);
-        button8.setSize(buttonSize);
-        button9.setSize(buttonSize);
-
-
-
-
+        button0.setPreferredSize(buttonSize);
+        button1.setPreferredSize(buttonSize);
+        button2.setPreferredSize(buttonSize);
+        button3.setPreferredSize(buttonSize);
+        button4.setPreferredSize(buttonSize);
+        button5.setPreferredSize(buttonSize);
+        button6.setPreferredSize(buttonSize);
+        button7.setPreferredSize(buttonSize);
+        button8.setPreferredSize(buttonSize);
+        button9.setPreferredSize(buttonSize);
 
         layout.putConstraint(SpringLayout.WEST, button0, 0, SpringLayout.WEST, button2);
         layout.putConstraint(SpringLayout.WEST, button1, 10, SpringLayout.WEST, objectContainer);
