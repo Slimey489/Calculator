@@ -10,11 +10,14 @@ class Main {
 
     private Dimension buttonSize;
     public JFrame frameMain;
+    public String expression;
+    public ArrayList<String> operation;
     SpringLayout layout;
     public JButton button1,button2,button3,button4,button5,button6,button7,button8,button9,button0;
     public JButton equalsButton,multiplicationButton,divisionButton,brackets,exponentButton,subtractionButton,additionButton;
     Container objectContainer;
     public JFrame  mainFrame(){
+        expression = "";
         frameMain = new JFrame();
         mainFrameSize = new Dimension(300,300);
         buttonSize = new Dimension(60,30);
@@ -110,6 +113,58 @@ class Main {
         frameMain.setVisible(true);
         return frameMain;
     }
+    private class Action implements ActionListener{
+        static String eSource;
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == button0){
+                expression = expression + "0";
+            }
+            else if (e.getSource() == button1) {
+                expression = expression + "1";
+            }
+            else if (e.getSource() == button2) {
+                expression = expression + "2";
+            }
+            else if (e.getSource() == button3) {
+                expression = expression + "3";
+            }
+            else if (e.getSource() == button4) {
+                expression = expression + "4";
+            }
+            else if (e.getSource() == button5) {
+                expression = expression + "5";
+            }
+            else if (e.getSource() == button6) {
+                expression = expression + "6";
+            }
+            else if (e.getSource() == button7) {
+                expression = expression + "7";
+            }
+            else if (e.getSource() == button8) {
+                expression = expression + "8";
+            }
+            else if (e.getSource() == button9) {
+                expression = expression + "9";
+            }
+            else if (e.getSource() == brackets) {
+                expression = expression + "()";
+            }
+            else if (e.getSource() == multiplicationButton) {
+                expression = expression + "*";
+            }
+            else if (e.getSource() == divisionButton) {
+                expression = expression + "/";
+            }
+            else if (e.getSource() == additionButton) {
+                expression = expression + "+";
+            }
+            else if (e.getSource() == subtractionButton) {
+                expression = expression + "-";
+            }
+            else if (e.getSource() == exponentButton) {
+                expression = expression + "^";
+            }
+            System.out.println(expression);
 
         }
     }
