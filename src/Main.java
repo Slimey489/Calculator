@@ -206,6 +206,7 @@ class Main {
 
 
         objectContainer.setSize(mainFrameSize);
+        frameMain.setResizable(false);
         frameMain.setSize(mainFrameSize);
         frameMain.setLayout(layout);
         frameMain.setVisible(true);
