@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import org.apache.commons.lang3.StringUtils;
 
 class Main {
 
@@ -10,7 +11,7 @@ class Main {
 
     private Dimension buttonSize;
     public JFrame frameMain;
-    public String expression;
+    public static String expression;
     public ArrayList<String> operation;
     SpringLayout layout;
     public JButton button1,button2,button3,button4,button5,button6,button7,button8,button9,button0;
@@ -34,8 +35,6 @@ class Main {
         button0 = new JButton("0");
         button0.setBackground(buttonBackgroundColour);
         button0.setForeground(buttonForegroundColour);
-
-
         button1 = new JButton("1");
         button1.setBackground(buttonBackgroundColour);
         button1.setForeground(buttonForegroundColour);
@@ -244,7 +243,8 @@ class Main {
             } else if (e.getSource() == button9) {
                 expression = textField.getText() + 9;
                 textField.setText(expression);
-            } else if (e.getSource() == brackets) {
+            }
+            if (e.getSource() == brackets) {
                 expression = textField.getText() + "()";
                 textField.setText(expression);
             } else if (e.getSource() == multiplicationButton) {
@@ -264,6 +264,7 @@ class Main {
                 textField.setText(expression);
             } else if (e.getSource() == equalsButton){
                 expression = textField.getText();
+                textField.setText(new MathsPart().mathsPart(expression));
             } else if (e.getSource() == decimalButton) {
                 expression = textField.getText()+".";
                 textField.setText(expression);
@@ -277,16 +278,14 @@ class Main {
 
         }
     }
-
-
-
-
-
-
-
-
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new App());
+    }
+}
+class MathsPart{
+    public String mathsPart(String expression) {
+        String insideBrackets = StringUtils.substringBetween(expression,"(",")");
+        System.out.println(insideBrackets);
+        return insideBrackets;
     }
 }
