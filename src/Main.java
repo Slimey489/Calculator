@@ -284,8 +284,26 @@ class Main {
 }
 class MathsPart{
     public String mathsPart(String expression) {
+        Double answer = null;
+
+        while (answer == null){
+            try {
+                answer = Double.parseDouble(expression);
+            } catch (Exception e){
+                if (expression.contains("(")|expression.contains(")"))
+                    expression = reduceBrackets(expression);
+
+                 if (expression == null) {
+                     return null;
+                 }
+            }
+        }
+        return answer.toString();
+    }
+    public String reduceBrackets(String expression){
         String insideBrackets = StringUtils.substringBetween(expression,"(",")");
         System.out.println(insideBrackets);
         return insideBrackets;
+
     }
 }
