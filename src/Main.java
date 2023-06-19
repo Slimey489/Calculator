@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 
 class Main {
@@ -321,18 +323,18 @@ class MathsPart{
         String exponentLocation = StringUtils.substringAfter(expression, "^");
 
         exponentPower = StringUtils.substringBefore(exponentLocation, "-");
-        if (exponentPower != exponentLocation){
+        if (!Objects.equals(exponentPower, exponentLocation)){
             return exponentPower;
         }
         exponentPower = StringUtils.substringBefore(exponentLocation, "*");
-        if (exponentPower != exponentLocation){
+        if (!Objects.equals(exponentPower, exponentLocation)){
             return exponentPower;
         }
         exponentPower = StringUtils.substringBefore(exponentLocation, "/");
-        if (exponentPower != exponentLocation){
+        if (!Objects.equals(exponentPower, exponentLocation)){
             return exponentPower;
         }
-        
+
 
 
 
