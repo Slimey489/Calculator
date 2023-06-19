@@ -25,6 +25,7 @@ class Main {
         mainFrameSize = new Dimension(280,305);
         buttonSize = new Dimension(60,30);
         Dimension textFieldSize = new Dimension(255,80);
+
         Color buttonBackgroundColour = Color.GRAY;
         Color buttonForegroundColour = new Color(243, 242, 224);
 
@@ -198,7 +199,7 @@ class Main {
         objectContainer.add(subtractionButton);
         objectContainer.add(multiplicationButton);
         objectContainer.add(divisionButton);
-        objectContainer.add(brackets);
+        //objectContainer.add(brackets);
         objectContainer.add(exponentButton);
         objectContainer.add(decimalButton);
         objectContainer.add(clearButton);
@@ -282,7 +283,23 @@ class Main {
         SwingUtilities.invokeLater(new App());
     }
 }
+
+/*
+add a tilde "~"before every operator
+
+operations to add
++
+-
+=
+*
+^
+/
+()
+ */
 class MathsPart{
+    String exponentPower;
+    private String operators = "*/^-+";
+    private String numerals = "023456789.";
     public String mathsPart(String expression) {
         Double answer = null;
 
@@ -290,8 +307,8 @@ class MathsPart{
             try {
                 answer = Double.parseDouble(expression);
             } catch (Exception e){
-                if (expression.contains("(")|expression.contains(")"))
-                    expression = reduceBrackets(expression);
+                if (expression.contains("^"))
+                    expression = solveExponents(expression);
 
                  if (expression == null) {
                      return null;
@@ -300,10 +317,35 @@ class MathsPart{
         }
         return answer.toString();
     }
-    public String reduceBrackets(String expression){
-        String insideBrackets = StringUtils.substringBetween(expression,"(",")");
-        System.out.println(insideBrackets);
-        return insideBrackets;
+    public String solveExponents(String expression){
+        String exponentLocation = StringUtils.substringAfter(expression, "^");
 
+        exponentPower = StringUtils.substringBefore(exponentLocation, "-");
+        if (exponentPower != exponentLocation){
+            return exponentPower;
+        }
+        exponentPower = StringUtils.substringBefore(exponentLocation, "*");
+        if (exponentPower != exponentLocation){
+            return exponentPower;
+        }
+        exponentPower = StringUtils.substringBefore(exponentLocation, "/");
+        if (exponentPower != exponentLocation){
+            return exponentPower;
+        }
+        
+
+
+
+
+
+
+
+
+
+
+        return exponentPower;
     }
 }
+/*
+
+ */
