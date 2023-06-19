@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
 import org.apache.commons.lang3.StringUtils;
 
 class Main {
@@ -299,8 +300,11 @@ operations to add
 ()
  */
 class MathsPart{
-    String exponentPower;
+    Exponents exponents = new Exponents();
+
     private String operators = "*/^-+";
+
+
     private String numerals = "023456789.";
     public String mathsPart(String expression) {
         Double answer = null;
@@ -310,7 +314,8 @@ class MathsPart{
                 answer = Double.parseDouble(expression);
             } catch (Exception e){
                 if (expression.contains("^"))
-                    expression = solveExponents(expression);
+                    expression = String.valueOf(exponents.solver());
+
 
                  if (expression == null) {
                      return null;
@@ -319,34 +324,58 @@ class MathsPart{
         }
         return answer.toString();
     }
-    public String solveExponents(String expression){
-        String exponentLocation = StringUtils.substringAfter(expression, "^");
 
-        exponentPower = StringUtils.substringBefore(exponentLocation, "-");
-        if (!Objects.equals(exponentPower, exponentLocation)){
+    static class Exponents{
+        private String expressionToValue;
+        private String valueToBeModified;
+        private String exponentLocation;
+        String exponentPower;
+
+        public Double solver(){
+            String expression = Main.expression;
+            Double power = Double.parseDouble(reduceAfterExponents(expression));
+            Double value = Double.parseDouble(reduceBeforeExponents(expression));
+            value = Math.pow(value,power);
+            return value;
+        }
+        public String reduceAfterExponents(String expression){
+
+            exponentLocation = StringUtils.substringAfter(expression, "^");
+
+            exponentPower = StringUtils.substringBefore(exponentLocation, "-");
+            if (!Objects.equals(exponentPower, exponentLocation)){
+                return exponentPower;
+            }
+            exponentPower = StringUtils.substringBefore(exponentLocation, "*");
+            if (!Objects.equals(exponentPower, exponentLocation)){
+                return exponentPower;
+            }
+            exponentPower = StringUtils.substringBefore(exponentLocation, "/");
+            if (!Objects.equals(exponentPower, exponentLocation)){
+                return exponentPower;
+            }
+
             return exponentPower;
         }
-        exponentPower = StringUtils.substringBefore(exponentLocation, "*");
-        if (!Objects.equals(exponentPower, exponentLocation)){
-            return exponentPower;
+        public String reduceBeforeExponents(String expression){
+            expressionToValue = StringUtils.substringBefore(expression,"^");
+
+            valueToBeModified = StringUtils.substringBefore(expressionToValue, "-");
+            if (!Objects.equals(valueToBeModified, expressionToValue)){
+                return valueToBeModified;
+            }
+            valueToBeModified = StringUtils.substringBefore(expressionToValue, "*");
+            if (!Objects.equals(valueToBeModified, expressionToValue)){
+                return valueToBeModified;
+            }
+            valueToBeModified = StringUtils.substringBefore(expressionToValue, "/");
+            if (!Objects.equals(valueToBeModified, expressionToValue)){
+                return valueToBeModified;
+            }
+            return valueToBeModified;
         }
-        exponentPower = StringUtils.substringBefore(exponentLocation, "/");
-        if (!Objects.equals(exponentPower, exponentLocation)){
-            return exponentPower;
-        }
-
-
-
-
-
-
-
-
-
-
-
-        return exponentPower;
     }
+
 }
 /*
 
