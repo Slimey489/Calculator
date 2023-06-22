@@ -4,10 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Objects;
-
-
 import org.apache.commons.lang3.StringUtils;
-
 class Main {
 
     private Dimension mainFrameSize;
@@ -109,6 +106,7 @@ class Main {
         button7.addActionListener(new Action());
         button8.addActionListener(new Action());
         button9.addActionListener(new Action());
+        decimalButton.addActionListener(new Action());
         equalsButton.addActionListener(new Action());
         multiplicationButton.addActionListener(new Action());
         divisionButton.addActionListener(new Action());
@@ -288,79 +286,87 @@ class Main {
 class MathsPart{
     ArrayList<Double> answers = new ArrayList<>();
     Exponents exponents = new Exponents();
-
     Multiplication multiplication = new Multiplication();
     Division division = new Division();
     Addition addition = new Addition();
     Subtraction subtraction = new Subtraction();
+    String solverOut;
 
     public String mathsPart(String expression) {
-        Double answer = 0.0;
+        Double answer = null;
 
-        while (answer == 0.0){
+        while (answer == null){
             try {
                 answer = Double.parseDouble(expression);
             } catch (Exception e){
                 if (expression.contains("^"))
-                    answers.add(exponents.solver());
+                    expression = exponents.solver(expression);
                 if (!expression.contains("^") & expression.contains("*"))
-                    answers.add(multiplication.solver());
+                    expression = multiplication.solver(expression);
                  if (!expression.contains("^") & expression.contains("/"))
-                    answers.add(division.solver());
+                     expression = division.solver(expression);
                  if (!expression.contains("^") & !expression.contains("/") & !expression.contains("*") & expression.contains("+"))
-                    answers.add(addition.solver());
+                     expression = addition.solver(expression);
                  if (!expression.contains("^") & !expression.contains("/") & !expression.contains("*") & expression.contains("-"))
-                    answers.add(subtraction.solver());
+                     expression = subtraction.solver(expression);
                  if (!expression.contains("^") & !expression.contains("/") & !expression.contains("*") & !expression.contains("-") & !expression.contains("+"))
                     for (int i = 0; i < answers.size(); i++){
                         answer += answers.get(i);
                     }
-                 expression = "";
-
-
 
             }
 
         }
-        return answer.toString();
+        return expression;
     }
-
     static class Exponents{
         private String expressionToValue;
         private String valueToBeModified;
         private String exponentLocation;
         private String exponentPower;
 
-        public Double solver() {
-            String expression = Main.expression;
-            Double power = 1.0;
-            Double value = 1.0;
+        public String solver(String expression) {
+            Double value2 = 1.0;
+            Double value1 = 1.0;
             try {
-                power = Double.parseDouble(reduceAfterExponents(expression));
+                value1 = Double.parseDouble(reduceBeforeExponents(expression));
             } catch (Exception e) {
                 Main.textField.setText("");
-                Main.expression = Main.textField.getText();
-                return 0.0 ;
+                expression = Main.textField.getText();
+                return "0.0" ;
 
             }
 
             try {
-                value = Double.parseDouble(reduceBeforeExponents(expression));
+                value2 = Double.parseDouble(reduceAfterExponents(expression));
             } catch (Exception e) {
                 Main.textField.setText("Error");
-                Main.expression = Main.textField.getText();
-                return 0.0;
+                expression = Main.textField.getText();
+                return "0.0";
 
             }
+            value1 = Math.pow(value1, value2);
+            String expressionToReplace = reduceBeforeExponents(expression) + "^"+ (reduceAfterExponents(expression));
+            expression = StringUtils.replace(expression, expressionToReplace, value1.toString());
 
-            value = Math.pow(value, power);
-            return value;
+
+
+            return expression;
         }
+
         public String reduceAfterExponents(String expression){
 
             exponentLocation = StringUtils.substringAfter(expression, "^");
 
             exponentPower = StringUtils.substringBefore(exponentLocation, "-");
+            if (!Objects.equals(exponentPower, exponentLocation)){
+                return exponentPower;
+            }
+            exponentPower = StringUtils.substringBefore(exponentLocation, "^");
+            if (!Objects.equals(exponentPower, exponentLocation)){
+                return exponentPower;
+            }
+            exponentPower = StringUtils.substringBefore(exponentLocation, "+");
             if (!Objects.equals(exponentPower, exponentLocation)){
                 return exponentPower;
             }
@@ -391,6 +397,14 @@ class MathsPart{
             if (!Objects.equals(valueToBeModified, expressionToValue)){
                 return valueToBeModified;
             }
+            valueToBeModified = StringUtils.substringBefore(expressionToValue, "-");
+            if (!Objects.equals(valueToBeModified, expressionToValue)){
+                return valueToBeModified;
+            }
+            valueToBeModified = StringUtils.substringBefore(expressionToValue, "+");
+            if (!Objects.equals(valueToBeModified, expressionToValue)){
+                return valueToBeModified;
+            }
             return valueToBeModified;
         }
     }
@@ -400,16 +414,15 @@ class MathsPart{
         private String operatorLocation;
         private String rightValue;
 
-        public Double solver() {
-            String expression = Main.expression;
+        public String solver(String expression) {
             Double value2 = 1.0;
             Double value1 = 1.0;
             try {
                 value2 = Double.parseDouble(leftSideMultiplication(expression));
             } catch (Exception e) {
                 Main.textField.setText("");
-                Main.expression = Main.textField.getText();
-                return 0.0 ;
+                expression = Main.textField.getText();
+                return "0.0" ;
 
             }
 
@@ -417,26 +430,41 @@ class MathsPart{
                 value1 = Double.parseDouble(rightSideMultiplication(expression));
             } catch (Exception e) {
                 Main.textField.setText("Error");
-                Main.expression = Main.textField.getText();
-                return 0.0;
+                expression = Main.textField.getText();
+                return "0.0";
 
             }
-            //Main.expression = operatorLocation + expressionToValue;
-            //XXXXX
             value1 *=  value2;
-            return value1;
+            String expressionToReplace = leftSideMultiplication(expression) + "*"+ (rightSideMultiplication(expression));
+                expression = StringUtils.replace(expression, expressionToReplace, value1.toString());
+
+
+            return expression;
         }
         public String leftSideMultiplication(String expression){
 
             operatorLocation = StringUtils.substringBefore(expression, "*");
-
-            leftValue = StringUtils.substringAfter(operatorLocation, "-");
+            if( !operatorLocation.contains("*")&!operatorLocation.contains("/")&!operatorLocation.contains("-")&!operatorLocation.contains("+"))
+                return operatorLocation;
+            leftValue = StringUtils.substringBefore(operatorLocation, "-");
             if (!Objects.equals(leftValue, operatorLocation)){
                 return leftValue;
             }
-            leftValue = StringUtils.substringAfter(operatorLocation, "/");
+            leftValue = StringUtils.substringBefore(operatorLocation, "/");
             if (!Objects.equals(rightValue, operatorLocation)){
                 return leftValue;
+            }
+            rightValue = StringUtils.substringBefore(expressionToValue, "+");
+            if (!Objects.equals(rightValue, expressionToValue)){
+                return rightValue;
+            }
+            rightValue = StringUtils.substringBefore(expressionToValue, "*");
+            if (!Objects.equals(rightValue, expressionToValue)){
+                return rightValue;
+            }
+            rightValue = StringUtils.substringBefore(expressionToValue, "^");
+            if (!Objects.equals(rightValue, expressionToValue)){
+                return rightValue;
             }
 
             return leftValue;
@@ -444,17 +472,25 @@ class MathsPart{
 
         public String rightSideMultiplication(String expression){
             expressionToValue = StringUtils.substringAfter(expression,"*");
-
+            if( !expressionToValue.contains("*")&!expressionToValue.contains("/")&!expressionToValue.contains("-")&!expressionToValue.contains("+"))
+                return expressionToValue;
             rightValue = StringUtils.substringBefore(expressionToValue, "-");
             if (!Objects.equals(rightValue, expressionToValue)){
                 return rightValue;
             }
-
             rightValue = StringUtils.substringBefore(expressionToValue, "/");
             if (!Objects.equals(rightValue, expressionToValue)){
                 return rightValue;
             }
             rightValue = StringUtils.substringBefore(expressionToValue, "+");
+            if (!Objects.equals(rightValue, expressionToValue)){
+                return rightValue;
+            }
+            rightValue = StringUtils.substringBefore(expressionToValue, "*");
+            if (!Objects.equals(rightValue, expressionToValue)){
+                return rightValue;
+            }
+            rightValue = StringUtils.substringBefore(expressionToValue, "^");
             if (!Objects.equals(rightValue, expressionToValue)){
                 return rightValue;
             }
@@ -467,16 +503,15 @@ class MathsPart{
         private String operatorLocation;
         private String rightValue;
 
-        public Double solver() {
-            String expression = Main.expression;
+        public String solver(String expression) {
             Double value2 = 1.0;
             Double value1 = 1.0;
             try {
                 value2 = Double.parseDouble(leftSideDivision(expression));
             } catch (Exception e) {
                 Main.textField.setText("");
-                Main.expression = Main.textField.getText();
-                return 0.0 ;
+                expression = Main.textField.getText();
+                return "0.0" ;
 
             }
 
@@ -484,17 +519,30 @@ class MathsPart{
                 value1 = Double.parseDouble(rightSideDivision(expression));
             } catch (Exception e) {
                 Main.textField.setText("Error");
-                Main.expression = Main.textField.getText();
-                return 0.0;
+                expression = Main.textField.getText();
+                return "0.0";
 
             }
-
             value1 /=  value2;
-            return value1;
+            String expressionToReplace = leftSideDivision(expression) + "/"+ (rightSideDivision(expression));
+            expression = StringUtils.replace(expression,expressionToReplace,value1.toString());
+
+            return expression;
         }
+
+
+
         public String leftSideDivision(String expression){
 
-            operatorLocation = StringUtils.substringAfter(expression, "/");
+            operatorLocation = StringUtils.substringBefore(expression, "/");
+            if (!operatorLocation.contains("/")&!operatorLocation.contains("-")&operatorLocation.contains("+")){
+                return operatorLocation;
+            }
+
+            leftValue = StringUtils.substringBefore(expressionToValue, "/");
+            if (!Objects.equals(rightValue, expressionToValue)){
+                return leftValue;
+            }
 
             leftValue = StringUtils.substringBefore(operatorLocation, "-");
             if (!Objects.equals(leftValue, operatorLocation)){
@@ -509,7 +557,12 @@ class MathsPart{
         }
 
         public String rightSideDivision(String expression){
-            expressionToValue = StringUtils.substringBefore(expression,"/");
+            expressionToValue = StringUtils.substringAfter(expression,"/");
+
+            rightValue = StringUtils.substringBefore(expressionToValue, "/");
+            if (!Objects.equals(rightValue, expressionToValue)){
+                return rightValue;
+            }
 
             rightValue = StringUtils.substringBefore(expressionToValue, "-");
             if (!Objects.equals(rightValue, expressionToValue)){
@@ -529,16 +582,15 @@ class MathsPart{
         private String operatorLocation;
         private String rightValue;
 
-        public Double solver() {
-            String expression = Main.expression;
+        public String solver(String expression) {
             Double value2 = 1.0;
             Double value1 = 1.0;
             try {
                 value2 = Double.parseDouble(leftSideAddition(expression));
             } catch (Exception e) {
                 Main.textField.setText("");
-                Main.expression = Main.textField.getText();
-                return 0.0 ;
+                expression = Main.textField.getText();
+                return "0.0" ;
 
             }
 
@@ -546,29 +598,39 @@ class MathsPart{
                 value1 = Double.parseDouble(rightSideAddition(expression));
             } catch (Exception e) {
                 Main.textField.setText("Error");
-                Main.expression = Main.textField.getText();
-                return 0.0;
+                expression = Main.textField.getText();
+                return "0.0";
 
             }
-
             value1 +=  value2;
-            return value1;
+            String expressionToReplace = leftSideAddition(expression) + "+"+ (rightSideAddition(expression));
+            expression = StringUtils.replace(expression,expressionToReplace,value1.toString());
+
+            return expression;
         }
         public String leftSideAddition(String expression){
 
-            operatorLocation = StringUtils.substringAfter(expression, "+");
+            operatorLocation = StringUtils.substringBefore(expression, "+");
 
             leftValue = StringUtils.substringBefore(operatorLocation, "-");
             if (!Objects.equals(leftValue, operatorLocation)){
                 return leftValue;
             }
-            return rightValue;
+            leftValue = StringUtils.substringBefore(operatorLocation, "+");
+            if (!Objects.equals(leftValue, operatorLocation)){
+                return leftValue;
+            }
+            return leftValue;
         }
 
         public String rightSideAddition(String expression){
-            expressionToValue = StringUtils.substringBefore(expression,"+");
+            expressionToValue = StringUtils.substringAfter(expression,"+");
 
-            leftValue = StringUtils.substringBefore(expressionToValue, "-");
+            rightValue = StringUtils.substringBefore(expressionToValue, "-");
+            if (!Objects.equals(rightValue, expressionToValue)){
+                return rightValue;
+            }
+            rightValue = StringUtils.substringBefore(expressionToValue, "+");
             if (!Objects.equals(rightValue, expressionToValue)){
                 return rightValue;
             }
@@ -581,16 +643,15 @@ class MathsPart{
         private String operatorLocation;
         private String rightValue;
 
-        public Double solver() {
-            String expression = Main.expression;
+        public String solver(String expression) {
             Double value2 = 1.0;
             Double value1 = 1.0;
             try {
                 value2 = Double.parseDouble(leftSideSubtraction(expression));
-            }    catch(Exception e){
+            } catch (Exception e) {
                 Main.textField.setText("");
-                Main.expression = Main.textField.getText();
-                return 0.0 ;
+                expression = Main.textField.getText();
+                return "0.0" ;
 
             }
 
@@ -598,39 +659,30 @@ class MathsPart{
                 value1 = Double.parseDouble(rightSideSubtraction(expression));
             } catch (Exception e) {
                 Main.textField.setText("Error");
-                Main.expression = Main.textField.getText();
-                return 0.0;
+                expression = Main.textField.getText();
+                return "0.0";
 
             }
-
             value1 -=  value2;
-            return value1;
+            String expressionToReplace = leftSideSubtraction(expression) + "-"+ (rightSideSubtraction(expression));
+            expression = StringUtils.replace(expression,expressionToReplace,value1.toString());
+
+            return expression;
         }
         public String leftSideSubtraction(String expression){
-
-            operatorLocation = StringUtils.substringAfter(expression, "-");
+            operatorLocation = StringUtils.substringBefore(expression, "-");
 
             leftValue = StringUtils.substringBefore(operatorLocation, "-");
             if (!Objects.equals(leftValue, operatorLocation)){
                 return leftValue;
             }
-            leftValue = StringUtils.substringBefore(operatorLocation, "/");
-            if (!Objects.equals(leftValue, operatorLocation)){
-                return leftValue;
-            }
-
-            return rightValue;
+            return leftValue;
         }
 
         public String rightSideSubtraction(String expression){
-            expressionToValue = StringUtils.substringBefore(expression,"-");
+            expressionToValue = StringUtils.substringAfter(expression,"-");
 
-            leftValue = StringUtils.substringBefore(expressionToValue, "-");
-            if (!Objects.equals(rightValue, expressionToValue)){
-                return rightValue;
-            }
-
-            rightValue = StringUtils.substringBefore(expressionToValue, "/");
+            rightValue = StringUtils.substringBefore(expressionToValue, "-");
             if (!Objects.equals(rightValue, expressionToValue)){
                 return rightValue;
             }
@@ -645,4 +697,7 @@ remove first instance of operator seperated by operators eg
 replace with 14
 
 14*5
+num = "yo"
+num = 1
+
  */
