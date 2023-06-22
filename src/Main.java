@@ -268,7 +268,7 @@ class Main {
                 if (expression.matches("[^\\d\\*\\-\\+\\-\\^\\/^E]")){
 
                 }
-                textField.setText(new MathsPart().mathsPart(expression));
+                textField.setText(new EvaluateExpression().evaluate(expression));
 
             } else if (e.getSource() == decimalButton) {
                 expression = textField.getText()+".";
@@ -287,14 +287,14 @@ class Main {
         SwingUtilities.invokeLater(new App());
     }
 }
-class MathsPart{
+class EvaluateExpression {
     Exponents exponents = new Exponents();
     Multiplication multiplication = new Multiplication();
     Division division = new Division();
     Addition addition = new Addition();
     Subtraction subtraction = new Subtraction();
 
-    public String mathsPart(String expression) {
+    public String evaluate(String expression) {
         Double answer = null;
 
         while (answer == null){
