@@ -265,10 +265,12 @@ class Main {
             } else if (e.getSource() == equalsButton){
                 expression = textField.getText();
                 //TODO VVVV
-                if (expression.matches("[^\\d\\*\\-\\+\\-\\^\\/^E]")){
-
+                if (expression.matches("[\\d\\\\*\\\\+\\-\\\\/\\\\^E]")){
+                    textField.setText(new EvaluateExpression().evaluate(expression));
+                }else{
+                    textField.setText("Error");
                 }
-                textField.setText(new EvaluateExpression().evaluate(expression));
+
 
             } else if (e.getSource() == decimalButton) {
                 expression = textField.getText()+".";
