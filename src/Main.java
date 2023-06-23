@@ -265,11 +265,11 @@ class Main {
             } else if (e.getSource() == equalsButton){
                 expression = textField.getText();
                 //TODO VVVV
-                if (expression.matches("[\\d\\\\*\\\\+\\-\\\\/\\\\^E]")){
+                //if (expression.matches("[\\d?\\\\*?\\\\+?\\-?\\\\/?\\\\^?\\\\E]")){
                     textField.setText(new EvaluateExpression().evaluate(expression));
-                }else{
-                    textField.setText("Error");
-                }
+               // }else{
+                    //textField.setText("Error");
+                //}
 
 
             } else if (e.getSource() == decimalButton) {
@@ -420,14 +420,14 @@ class EvaluateExpression {
             Double value1;
             String operator = "*";
             try {
-                value2 = Double.parseDouble(leftSideMultiplication(expression,operator));
+                value1 = Double.parseDouble(leftSideMultiplication(expression,operator));
             } catch (Exception e) {
                 return "0.0" ;
 
             }
 
             try {
-                value1 = Double.parseDouble(rightSideMultiplication(expression,operator));
+                value2 = Double.parseDouble(rightSideMultiplication(expression,operator));
             } catch (Exception e) {
                 return "0.0";
 
@@ -507,14 +507,14 @@ class EvaluateExpression {
             Double value1;
             String operator = "/";
             try {
-                value2 = Double.parseDouble(leftSideDivision(expression,operator));
+                value1 = Double.parseDouble(leftSideDivision(expression,operator));
             } catch (Exception e) {
                 return "0.0" ;
 
             }
 
             try {
-                value1 = Double.parseDouble(rightSideDivision(expression,operator));
+                value2 = Double.parseDouble(rightSideDivision(expression,operator));
             } catch (Exception e) {
                 return "0.0";
 
@@ -583,7 +583,7 @@ class EvaluateExpression {
             Double value1;
             String operator = "+";
             try {
-                value2 = Double.parseDouble(rightSideAddition(expression,operator));
+                value2 = Double.parseDouble(leftSideAddition(expression,operator));
             } catch (Exception e) {
                 return "0.0" ;
 
