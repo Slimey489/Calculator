@@ -451,19 +451,19 @@ class EvaluateExpression {
                 return leftValue;
             }
             leftValue = StringUtils.substringBefore(operatorLocation, "/");
-            if (!Objects.equals(rightValue, operatorLocation)){
+            if (!Objects.equals(leftValue, operatorLocation)){
                 return leftValue;
             }
             rightValue = StringUtils.substringBefore(expressionToValue, "+");
-            if (!Objects.equals(rightValue, expressionToValue)){
+            if (!Objects.equals(leftValue, expressionToValue)){
                 return rightValue;
             }
             rightValue = StringUtils.substringBefore(expressionToValue, "*");
-            if (!Objects.equals(rightValue, expressionToValue)){
+            if (!Objects.equals(leftValue, expressionToValue)){
                 return rightValue;
             }
             rightValue = StringUtils.substringBefore(expressionToValue, "^");
-            if (!Objects.equals(rightValue, expressionToValue)){
+            if (!Objects.equals(leftValue, expressionToValue)){
                 return rightValue;
             }
 
