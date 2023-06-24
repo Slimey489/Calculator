@@ -537,8 +537,8 @@ class EvaluateExpression {
                 return operatorLocation;
             }
 
-            leftValue = StringUtils.substringBefore(expressionToValue, "/");
-            if (!Objects.equals(rightValue, expressionToValue)){
+            leftValue = StringUtils.substringBefore(operatorLocation, "/");
+            if (!Objects.equals(leftValue,operatorLocation)){
                 return leftValue;
             }
 
