@@ -643,14 +643,14 @@ class EvaluateExpression {
             Double value1;
             String operator = "-";
             try {
-                value2 = Double.parseDouble(leftSideSubtraction(expression,operator));
+                value1 = Double.parseDouble(leftSideSubtraction(expression,operator));
             } catch (Exception e) {
                 return "0.0" ;
 
             }
 
             try {
-                value1 = Double.parseDouble(rightSideSubtraction(expression,operator));
+                value2 = Double.parseDouble(rightSideSubtraction(expression,operator));
             } catch (Exception e) {
                 return "0.0";
 
