@@ -355,6 +355,32 @@ class EvaluateExpression {
             return expression;
         }
 
+        public String leftSideExponents(String expression, String operator){
+
+            expressionToValue = StringUtils.substringBefore(expression,operator);
+
+            leftSide = StringUtils.substringBefore(expressionToValue, "-");
+            if (!Objects.equals(leftSide, expressionToValue)){
+                return leftSide;
+            }
+            leftSide = StringUtils.substringBefore(expressionToValue, "*");
+            if (!Objects.equals(leftSide, expressionToValue)){
+                return leftSide;
+            }
+            leftSide = StringUtils.substringBefore(expressionToValue, "/");
+            if (!Objects.equals(leftSide, expressionToValue)){
+                return leftSide;
+            }
+            leftSide = StringUtils.substringBefore(expressionToValue, "-");
+            if (!Objects.equals(leftSide, expressionToValue)){
+                return leftSide;
+            }
+            leftSide = StringUtils.substringBefore(expressionToValue, "+");
+            if (!Objects.equals(leftSide, expressionToValue)){
+                return leftSide;
+            }
+            return leftSide;
+        }
         public String rightSideExponents(String expression, String operator){
 
             operatorLocation = StringUtils.substringAfter(expression, operator);
@@ -381,33 +407,6 @@ class EvaluateExpression {
             }
 
             return rightSide;
-        }
-
-        public String leftSideExponents(String expression, String operator){
-
-            expressionToValue = StringUtils.substringBefore(expression,operator);
-
-            leftSide = StringUtils.substringBefore(expressionToValue, "-");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-            leftSide = StringUtils.substringBefore(expressionToValue, "*");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-            leftSide = StringUtils.substringBefore(expressionToValue, "/");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-            leftSide = StringUtils.substringBefore(expressionToValue, "-");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-            leftSide = StringUtils.substringBefore(expressionToValue, "+");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-            return leftSide;
         }
     }
     static class Multiplication{
