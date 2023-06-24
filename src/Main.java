@@ -269,10 +269,11 @@ class Main {
                 expression = textField.getText();
                 //TODO VVVV
                 //if (expression.matches("[\\d?\\\\*?\\\\+?\\-?\\\\/?\\\\^?\\\\E]")){
+                if (!StringUtils.containsAny(expression,"abcdefghijlmnopqrstuvwxyz!@#$%&(){}[]\\|:;,?_\"=")){
                     textField.setText(new EvaluateExpression().evaluate(expression));
-               // }else{
-                    //textField.setText("Error");
-                //}
+                }else{
+                    textField.setText("Error");
+                }
 
 
             } else if (e.getSource() == decimalButton) {
@@ -301,6 +302,7 @@ class EvaluateExpression {
 
     public String evaluate(String expression) {
         Double answer = null;
+        int i =0;
 
         while (answer == null){
             try {
@@ -317,7 +319,10 @@ class EvaluateExpression {
                  if (!expression.contains("^") & !expression.contains("/") & !expression.contains("*") & expression.contains("-"))
                      expression = subtraction.solver(expression);
             }
-
+            i++;
+            if (i == 10000){
+                return "Error";
+            }
         }
         return expression;
     }
