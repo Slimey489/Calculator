@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
+import java.util.regex.Pattern;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 class Main {
 
@@ -209,6 +211,7 @@ class Main {
         frameMain.setSize(mainFrameSize);
         frameMain.setLayout(layout);
         frameMain.setVisible(true);
+        frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         return frameMain;
     }
     private class Action implements ActionListener{
@@ -344,10 +347,8 @@ class EvaluateExpression {
             }
             value1 = Math.pow(value1, value2);
             expressionToReplace = leftSideExponents(expression,operator) + operator + (rightSideExponents(expression,operator));
-
-
-
-            expression = StringUtils.replace(expression, expressionToReplace, value1.toString());
+            String quote = Pattern.quote(expressionToReplace);
+            expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
 
 
 
@@ -434,8 +435,9 @@ class EvaluateExpression {
             }
 
             value1 *=  value2;
-            String expressionToReplace = leftSideMultiplication(expression,operator) + operator+ (rightSideMultiplication(expression,operator));
-            expression = StringUtils.replace(expression, expressionToReplace, value1.toString());
+            String expressionToReplace = leftSideMultiplication(expression,operator) + operator + (rightSideMultiplication(expression,operator));
+            String quote = Pattern.quote(expressionToReplace);
+            expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
 
 
             return expression;
@@ -520,8 +522,9 @@ class EvaluateExpression {
 
             }
             value1 /=  value2;
-            String expressionToReplace = leftSideDivision(expression,operator) + operator+ (rightSideDivision(expression,operator));
-            expression = StringUtils.replace(expression,expressionToReplace,value1.toString());
+            String expressionToReplace = leftSideDivision(expression,operator) + operator + (rightSideDivision(expression,operator));
+            String quote = Pattern.quote(expressionToReplace);
+            expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
 
             return expression;
         }
@@ -597,8 +600,8 @@ class EvaluateExpression {
             }
             value1 +=  value2;
             String expressionToReplace = leftSideAddition(expression, operator) + operator + (rightSideAddition(expression,operator));
-            expression = StringUtils.replace(expression,expressionToReplace,value1.toString());
-
+            String quote = Pattern.quote(expressionToReplace);
+            expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
             return expression;
         }
         public String leftSideAddition(String expression, String operator){
@@ -655,7 +658,8 @@ class EvaluateExpression {
             }
             value1 -=  value2;
             String expressionToReplace = leftSideSubtraction(expression,operator) + operator + (rightSideSubtraction(expression,operator));
-            expression = StringUtils.replace(expression,expressionToReplace,value1.toString());
+            String quote = Pattern.quote(expressionToReplace);
+            expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
 
             return expression;
         }
