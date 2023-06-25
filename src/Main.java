@@ -20,13 +20,15 @@ class Main {
     /**
      * Creates calculator GUI with the operators ^ * / - +
      * now with custom colours
-     * @return frameMain
      */
-    public JFrame  mainFrame(){
+    public void mainFrame(){
         expression = "";
 
         //Sets element sizes and colours
         frameMain = new JFrame();
+
+        //Sets frame title
+        frameMain.setTitle("Calculator");
 
         //Setting mainFrame size
         mainFrameSize = new Dimension(280,305);
@@ -249,7 +251,6 @@ class Main {
         //Makes program exit on window close
         frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        return frameMain;
     }
 
     /**
@@ -306,18 +307,20 @@ class Main {
             } else if (e.getSource() == exponentButton) {
                 expression = textField.getText() + "^";
                 textField.setText(expression);
-            } else if (e.getSource() == equalsButton){
+            } else if (e.getSource() == equalsButton) {
                 expression = textField.getText();
-                //Broken Regex VV
-                //XXX
-                //if (expression.matches("[\\d?\\\\*?\\\\+?\\-?\\\\/?\\\\^?\\\\E]")){
-                if (!StringUtils.containsAny(expression,"abcdefghijlmnopqrstuvwxyz!@#$%&(){}[]\\|:;,?_\"=")){
+                if (!StringUtils.containsAny(expression, "abcdefghijlmnopqrstuvwxyz!@#$%&(){}[]\\|:;,?_\"=")) {
                     textField.setText(new EvaluateExpression().evaluate(expression));
-                }else{
+                } else {
                     textField.setText("Error");
                 }
-
-
+            }else if (e.getSource() == textField){
+                    expression = textField.getText();
+                    if (!StringUtils.containsAny(expression,"abcdefghijlmnopqrstuvwxyz!@#$%&(){}[]\\|:;,?_\"=")){
+                        textField.setText(new EvaluateExpression().evaluate(expression));
+                    }else{
+                        textField.setText("Error");
+                    }
             } else if (e.getSource() == decimalButton) {
                 expression = textField.getText()+".";
                 textField.setText(expression);
