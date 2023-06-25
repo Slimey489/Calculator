@@ -45,6 +45,7 @@ class EvaluateExpression {
                 return "Error";
             }
         }
+        expression = answer.toString();
         return expression;
     }
 
@@ -154,7 +155,7 @@ class EvaluateExpression {
     }
 
 
-    static class Multiplication{
+   static class Multiplication{
         private String leftValue;
         private String expressionToValue;
         private String operatorLocation;
