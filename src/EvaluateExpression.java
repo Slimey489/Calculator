@@ -56,7 +56,7 @@ class EvaluateExpression {
         private String expressionToReplace;
 
         /**
-         * @param expression the input expression containing the caret character
+         * @param expression the input expression containing the caret "^" character
          * @return expression   same as input but with first exponent being solved
          * @error_return 0.0 returns 0.0 in case the return value of either leftSideExponents or rightSideExponents fails to parse a double
          */
@@ -67,6 +67,7 @@ class EvaluateExpression {
             try {
                 value1 = Double.parseDouble(leftSideExponents(expression,operator));
             } catch (Exception e) {
+                //TODO
                 // Add Proper error management
                 return "0.0" ;
 
@@ -87,7 +88,11 @@ class EvaluateExpression {
 
             return expression;
         }
-
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return leftValue the numerical value on the left side of the operator
+         */
         public String leftSideExponents(String expression, String operator){
 
             expressionToValue = StringUtils.substringBefore(expression,operator);
@@ -114,6 +119,11 @@ class EvaluateExpression {
             }
             return leftSide;
         }
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return leftValue the numerical value on the left side of the operator
+         */
         public String rightSideExponents(String expression, String operator){
 
             operatorLocation = StringUtils.substringAfter(expression, operator);
@@ -150,8 +160,8 @@ class EvaluateExpression {
         private String operatorLocation;
         private String rightValue;
         /**
-         * @param expression the input expression containing the asterisk character
-         * @return expression same as input but with first multiplication being solved
+         * @param expression the input expression containing the asterisk "*" character
+         * @return expression same as input but with first multiplication problem being solved
          * @error_return 0.0 returns 0.0 in case the return value of either leftSideMultiplication or rightSideMultiplication fails to parse a double
          */
         public String solver(String expression) {
@@ -182,15 +192,17 @@ class EvaluateExpression {
         }
 
         /**
-         * @param expression
-         * @param operator
-         * @return
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return leftValue the numerical value on the left side of the operator
          */
         public String leftSideMultiplication(String expression, String operator){
 
             operatorLocation = StringUtils.substringBefore(expression, operator);
-            if( !operatorLocation.contains("*")&!operatorLocation.contains("/")&!operatorLocation.contains("-")&!operatorLocation.contains("+"))
-                return operatorLocation;
+            if( !operatorLocation.contains("*")&!operatorLocation.contains("/")&!operatorLocation.contains("-")&!operatorLocation.contains("+")){
+                leftValue = operatorLocation;
+                return leftValue;
+            }
             leftValue = StringUtils.substringBefore(operatorLocation, "-");
             if (!Objects.equals(leftValue, operatorLocation)){
                 return leftValue;
@@ -215,10 +227,17 @@ class EvaluateExpression {
             return rightValue;
         }
 
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return leftValue the numerical value on the left side of the operator
+         */
         public String rightSideMultiplication(String expression, String operator){
             expressionToValue = StringUtils.substringAfter(expression,operator);
-            if( !expressionToValue.contains("*")&!expressionToValue.contains("/")&!expressionToValue.contains("-")&!expressionToValue.contains("+"))
-                return expressionToValue;
+            if( !expressionToValue.contains("*")&!expressionToValue.contains("/")&!expressionToValue.contains("-")&!expressionToValue.contains("+")) {
+                rightValue = expressionToValue;
+                return rightValue;
+            }
             rightValue = StringUtils.substringBefore(expressionToValue, "-");
             if (!Objects.equals(rightValue, expressionToValue)){
                 return rightValue;
@@ -247,7 +266,11 @@ class EvaluateExpression {
         private String expressionToValue;
         private String operatorLocation;
         private String rightValue;
-
+        /**
+         * @param expression the input expression containing the slash "/" character
+         * @return expression same as input but with first division problem being solved
+         * @error_return 0.0 returns 0.0 in case the return value of either leftSideDivision or rightSideDivision fails to parse a double
+         */
         public String solver(String expression) {
             Double value2;
             Double value1;
@@ -274,12 +297,17 @@ class EvaluateExpression {
         }
 
 
-
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return leftValue the numerical value on the left side of the operator
+         */
         public String leftSideDivision(String expression, String operator){
 
             operatorLocation = StringUtils.substringBefore(expression, operator);
             if (!operatorLocation.contains("/")&!operatorLocation.contains("-")&operatorLocation.contains("+")){
-                return operatorLocation;
+                leftValue = operatorLocation;
+                return leftValue;
             }
 
             leftValue = StringUtils.substringBefore(operatorLocation, "/");
@@ -298,7 +326,11 @@ class EvaluateExpression {
 
             return leftValue;
         }
-
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return rightValue the numerical value on the right side of the operator
+         */
         public String rightSideDivision(String expression, String operator){
             expressionToValue = StringUtils.substringAfter(expression,operator);
 
@@ -324,7 +356,11 @@ class EvaluateExpression {
         private String expressionToValue;
         private String operatorLocation;
         private String rightValue;
-
+        /**
+         * @param expression the input expression containing the plus "+" character
+         * @return expression same as input but with first addition problem being solved
+         * @error_return 0.0 returns 0.0 in case the return value of either leftSideAddition or rightSideAddition fails to parse a double
+         */
         public String solver(String expression) {
             Double value2;
             Double value1;
@@ -348,6 +384,11 @@ class EvaluateExpression {
             expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
             return expression;
         }
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return leftValue the numerical value on the left side of the operator
+         */
         public String leftSideAddition(String expression, String operator){
 
             operatorLocation = StringUtils.substringBefore(expression, operator);
@@ -362,7 +403,11 @@ class EvaluateExpression {
             }
             return leftValue;
         }
-
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return rightValue the numerical value on the right side of the operator
+         */
         public String rightSideAddition(String expression,String operator){
             expressionToValue = StringUtils.substringAfter(expression,operator);
 
@@ -382,7 +427,11 @@ class EvaluateExpression {
         private String expressionToValue;
         private String operatorLocation;
         private String rightValue;
-
+        /**
+         * @param expression the input expression containing the hyphen "-" character
+         * @return expression same as input but with first subtraction problem being solved
+         * @error_return 0.0 returns 0.0 in case the return value of either leftSideSubtraction or rightSideSubtraction fails to parse a double
+         */
         public String solver(String expression) {
             Double value2;
             Double value1;
@@ -407,6 +456,11 @@ class EvaluateExpression {
 
             return expression;
         }
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return leftValue the numerical value on the left side of the operator
+         */
         public String leftSideSubtraction(String expression, String operator){
             operatorLocation = StringUtils.substringBefore(expression, operator);
 
@@ -416,7 +470,11 @@ class EvaluateExpression {
             }
             return leftValue;
         }
-
+        /**
+         * @param expression the input expression
+         * @param operator the operator being used to find the correct value
+         * @return rightValue the numerical value on the right side of the operator
+         */
         public String rightSideSubtraction(String expression, String operator){
             expressionToValue = StringUtils.substringAfter(expression,operator);
 

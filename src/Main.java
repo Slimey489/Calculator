@@ -16,20 +16,39 @@ class Main {
     public static JTextField textField;
     public JButton clearButton;
     Container objectContainer;
+
+    /**
+     * Creates calculator GUI with the operators ^ * / - +
+     * now with custom colours
+     * @return frameMain
+     */
     public JFrame  mainFrame(){
         expression = "";
+
+        //Sets element sizes and colours
         frameMain = new JFrame();
+
+        //Setting mainFrame size
         mainFrameSize = new Dimension(280,305);
+
+        //Sets button size variable
         buttonSize = new Dimension(60,30);
+
+        //Sets text field size
         Dimension textFieldSize = new Dimension(255,80);
 
+        //Sets colour variables
         Color buttonBackgroundColour = Color.GRAY;
         Color buttonForegroundColour = new Color(243, 242, 224);
 
+        //Setting objectContainer value
         objectContainer = frameMain.getContentPane();
-        layout = new SpringLayout();
 
+        //Sets layout
+        layout = new SpringLayout();
         textField = new JTextField();
+
+        //Sets button colours and text
         button0 = new JButton("0");
         button0.setBackground(buttonBackgroundColour);
         button0.setForeground(buttonForegroundColour);
@@ -88,12 +107,16 @@ class Main {
         clearButton.setBackground(buttonBackgroundColour);
         clearButton.setForeground(buttonForegroundColour);
 
+        //Sets up the text field with custom font and colours
         textField.setFont(new Font("Calibri",Font.BOLD,50));
         textField.setForeground(Color.WHITE);
         textField.setBackground(Color.DARK_GRAY);
+        //Removes text field border
         textField.setBorder(null);
+        //Sets frame colour
         objectContainer.setBackground(Color.DARK_GRAY);
 
+        //Adds button press functionality
         button0.addActionListener(new Action());
         button1.addActionListener(new Action());
         button2.addActionListener(new Action());
@@ -114,6 +137,7 @@ class Main {
         subtractionButton.addActionListener(new Action());
         clearButton.addActionListener(new Action());
 
+        //Setting elemtent sizes
         textField.setPreferredSize(textFieldSize);
         button0.setPreferredSize(buttonSize);
         button1.setPreferredSize(buttonSize);
@@ -135,13 +159,18 @@ class Main {
         exponentButton.setPreferredSize(buttonSize);
         clearButton.setPreferredSize(buttonSize);
 
+        // Sets UI element positioning
+        //Sets text field position
         layout.putConstraint(SpringLayout.WEST,textField,5,SpringLayout.WEST,objectContainer);
         layout.putConstraint(SpringLayout.NORTH,textField,5,SpringLayout.NORTH,objectContainer);
 
+        //Change this to move overall ui horizontal positioning
         layout.putConstraint(SpringLayout.WEST, button7, 5, SpringLayout.WEST, objectContainer);
 
+        //Change this to move overall ui vertical positioning
         layout.putConstraint(SpringLayout.NORTH, button7, 125, SpringLayout.NORTH, objectContainer);
 
+        //Horizontal Positioning
         layout.putConstraint(SpringLayout.WEST, button0, 0, SpringLayout.WEST, button2);
         layout.putConstraint(SpringLayout.WEST, button1, 0, SpringLayout.WEST, button7);
         layout.putConstraint(SpringLayout.WEST, button2, 5, SpringLayout.EAST, button1);
@@ -161,7 +190,7 @@ class Main {
         layout.putConstraint(SpringLayout.WEST,exponentButton,0,SpringLayout.WEST,button8);
         layout.putConstraint(SpringLayout.WEST,clearButton,0,SpringLayout.WEST,button9);
 
-
+        //Vertical Positioning
         layout.putConstraint(SpringLayout.NORTH, button0, 5, SpringLayout.SOUTH, button2);
         layout.putConstraint(SpringLayout.NORTH, button1, 5, SpringLayout.SOUTH, button4);
         layout.putConstraint(SpringLayout.NORTH, button2, 5, SpringLayout.SOUTH, button5);
@@ -180,6 +209,8 @@ class Main {
         layout.putConstraint(SpringLayout.SOUTH,brackets,-5,SpringLayout.NORTH,button7);
         layout.putConstraint(SpringLayout.SOUTH,exponentButton,-5,SpringLayout.NORTH,button8);
         layout.putConstraint(SpringLayout.SOUTH,clearButton,-5,SpringLayout.NORTH,button9);
+
+        // adds the UI elements to the contentpane
 
         objectContainer.add(textField);
         objectContainer.add(button0);
@@ -202,15 +233,28 @@ class Main {
         objectContainer.add(decimalButton);
         objectContainer.add(clearButton);
 
-
+        //Setting frame size
         objectContainer.setSize(mainFrameSize);
-        frameMain.setResizable(false);
         frameMain.setSize(mainFrameSize);
+
+        //Makes the window not resizeable
+        frameMain.setResizable(false);
+
+        //Setting frame layout
         frameMain.setLayout(layout);
+
+        //Makes the elemtemts visible
         frameMain.setVisible(true);
+
+        //Makes program exit on window close
         frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         return frameMain;
     }
+
+    /**
+     * Defines actions to be performed when specific buttons are pressed
+     */
     private class Action implements ActionListener{
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == button0) {
