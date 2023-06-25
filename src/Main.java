@@ -13,6 +13,7 @@ class Main {
     SpringLayout layout;
     public JButton button1,button2,button3,button4,button5,button6,button7,button8,button9,button0;
     public JButton equalsButton,multiplicationButton,divisionButton,brackets,exponentButton,subtractionButton,additionButton,decimalButton;
+    public JButton backButton;
     public static JTextField textField;
     public JButton clearButton;
     Container objectContainer;
@@ -108,6 +109,9 @@ class Main {
         clearButton = new JButton("CE");
         clearButton.setBackground(buttonBackgroundColour);
         clearButton.setForeground(buttonForegroundColour);
+        backButton = new JButton("<--");
+        backButton.setBackground(buttonBackgroundColour);
+        backButton.setForeground(buttonForegroundColour);
 
         //Sets up the text field with custom font and colours
         textField.setFont(new Font("Calibri",Font.BOLD,50));
@@ -138,6 +142,7 @@ class Main {
         additionButton.addActionListener(new Action());
         subtractionButton.addActionListener(new Action());
         clearButton.addActionListener(new Action());
+        backButton.addActionListener(new Action());
 
         //Setting elemtent sizes
         textField.setPreferredSize(textFieldSize);
@@ -160,6 +165,7 @@ class Main {
         brackets.setPreferredSize(buttonSize);
         exponentButton.setPreferredSize(buttonSize);
         clearButton.setPreferredSize(buttonSize);
+        backButton.setPreferredSize(buttonSize);
 
         // Sets UI element positioning
         //Sets text field position
@@ -191,6 +197,7 @@ class Main {
         layout.putConstraint(SpringLayout.WEST,brackets,0,SpringLayout.WEST,button7);
         layout.putConstraint(SpringLayout.WEST,exponentButton,0,SpringLayout.WEST,button8);
         layout.putConstraint(SpringLayout.WEST,clearButton,0,SpringLayout.WEST,button9);
+        layout.putConstraint(SpringLayout.WEST,backButton,0,SpringLayout.WEST,button7);
 
         //Vertical Positioning
         layout.putConstraint(SpringLayout.NORTH, button0, 5, SpringLayout.SOUTH, button2);
@@ -211,6 +218,7 @@ class Main {
         layout.putConstraint(SpringLayout.SOUTH,brackets,-5,SpringLayout.NORTH,button7);
         layout.putConstraint(SpringLayout.SOUTH,exponentButton,-5,SpringLayout.NORTH,button8);
         layout.putConstraint(SpringLayout.SOUTH,clearButton,-5,SpringLayout.NORTH,button9);
+        layout.putConstraint(SpringLayout.SOUTH,backButton,-5,SpringLayout.NORTH,button7);
 
         // adds the UI elements to the contentpane
 
@@ -234,6 +242,7 @@ class Main {
         objectContainer.add(exponentButton);
         objectContainer.add(decimalButton);
         objectContainer.add(clearButton);
+        objectContainer.add(backButton);
 
         //Setting frame size
         objectContainer.setSize(mainFrameSize);
@@ -328,6 +337,9 @@ class Main {
                 textField.setText("");
                 expression = textField.getText();
 
+            } else if (e.getSource() == backButton) {
+                SwingUtilities.invokeLater(new App());
+                frameMain.dispose();
             }
         }
     }
