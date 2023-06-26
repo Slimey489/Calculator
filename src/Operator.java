@@ -1,3 +1,6 @@
+/**
+ * Contains Methods that deconstruct and evaluate a mathematical expression.
+ */
 public interface Operator {
     /**
      * @param expression A mathematical expression.
@@ -20,4 +23,3 @@ public interface Operator {
     String rightOfOperator(String expression, String operator);
 
 }
-
