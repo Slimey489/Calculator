@@ -7,7 +7,7 @@ import java.lang.reflect.Array;
 import java.util.Objects;
 
 /**
- * Contains everything needed to create a small quiz frame
+ * Contains everything needed to create a small quiz frame.
  */
 public class Quiz {
     JFrame quizFrame;
@@ -21,9 +21,9 @@ public class Quiz {
     SpringLayout layout;
 
     /**
-     * @param min minimum value to be returned
-     * @param max  maximum value to be returned
-     * @return a random integer with minimum value "min" and maximum value "max"
+     * @param min minimum value to be returned.
+     * @param max  maximum value to be returned.
+     * @return a random integer with minimum value "min" and maximum value "max".
      */
     int randomNumber(int min, int max)
     {
