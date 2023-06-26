@@ -39,8 +39,8 @@ class EvaluateExpression {
                 }
                 if (!expression.contains("^") && !expression.contains("/") && !expression.contains("*") && expression.contains("+")){
                     operator = "+";
-                expression = operators.solver(expression, operator);
-            }
+                    expression = operators.solver(expression, operator);
+                }
                 if (!expression.contains("^") && !expression.contains("/") && !expression.contains("*") && expression.contains("-")) {
                     operator = "-";
                     expression = operators.solver(expression, operator);
@@ -63,13 +63,9 @@ class EvaluateExpression {
      *  See documentation for  {@code Operator} for below class & methods.
     **/
     static class Operators implements Operator{
-        private String expressionToValue;
-        private String leftSide;
-        private String operatorLocation;
-        private String rightSide;
-        private String expressionToReplace;
         @Override
         public String solver(String expression,String operator) {
+            String expressionToReplace;
             double value2;
             double value1;
             try {
@@ -87,6 +83,7 @@ class EvaluateExpression {
                 return expression;
 
             }
+            //Switch cases for different operators
             switch (operator) {
                 case "^" -> value1 = Math.pow(value1, value2);
                 case "*" -> value1 *= value2;
@@ -102,6 +99,9 @@ class EvaluateExpression {
 
         @Override
         public String leftOfOperator(String expression, String operator) {
+            String expressionToValue;
+            String leftSide;
+
             expressionToValue = StringUtils.substringBefore(expression,operator);
 
             leftSide = StringUtils.substringBefore(expressionToValue, "^");
@@ -130,6 +130,9 @@ class EvaluateExpression {
 
         @Override
         public String rightOfOperator(String expression, String operator) {
+            String operatorLocation;
+            String rightSide;
+
             operatorLocation = StringUtils.substringAfter(expression, operator);
 
             rightSide = StringUtils.substringBefore(operatorLocation, "^");
