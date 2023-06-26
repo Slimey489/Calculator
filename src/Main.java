@@ -111,7 +111,7 @@ class Main {
         backButton.setForeground(buttonForegroundColour);
 
         //Sets up the text field with custom font and colours
-        textField.setFont(new Font("Calibri",Font.BOLD,50));
+        textField.setFont(new Font("Calibre",Font.BOLD,50));
         textField.setForeground(Color.WHITE);
         textField.setBackground(Color.DARK_GRAY);
         //Removes text field border
@@ -141,7 +141,7 @@ class Main {
         clearButton.addActionListener(new Action());
         backButton.addActionListener(new Action());
 
-        //Setting elemtent sizes
+        //Setting element sizes
         textField.setPreferredSize(textFieldSize);
         button0.setPreferredSize(buttonSize);
         button1.setPreferredSize(buttonSize);
@@ -251,7 +251,7 @@ class Main {
         //Setting frame layout
         frameMain.setLayout(layout);
 
-        //Makes the elemtemts visible
+        //Makes the elements visible
         frameMain.setVisible(true);
 
         //Makes program exit on window close
