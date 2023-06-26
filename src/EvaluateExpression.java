@@ -45,11 +45,15 @@ class EvaluateExpression {
                     operator = "-";
                     expression = operators.solver(expression, operator);
                 }
+                if (expression.equals("Error")){
+                    return expression;
                 }
-            // this prevents an infinite loop situation that would hang the program.
+                }
+            // This prevents an infinite loop situation that would hang the program.
             i++;
             if (i == 10000){
-                return "Error";
+                expression = "Error";
+                return expression;
             }
         }
         expression = answer.toString();
@@ -71,16 +75,16 @@ class EvaluateExpression {
             try {
                 value1 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
-                //TODO
-                // Add Proper error management
-                return "0.0" ;
+                expression = "Error";
+                return expression;
 
             }
 
             try {
                 value2 = Double.parseDouble(rightOfOperator(expression,operator));
             } catch (Exception e) {
-                return "0.0";
+                expression = "Error";
+                return expression;
 
             }
             switch (operator) {
