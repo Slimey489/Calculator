@@ -50,15 +50,29 @@ public class Quiz {
      * Creates a frame containing a text box and two labels.
      */
     public void quizFrame(){
+        //TODO
+        //Set element colours.
+
         //Sets initial values for variables.
-        correct = new JLabel("Correct");
-        incorrect = new JLabel("Incorrect");
-        backButton = new JButton("Back");
+
         layout = new SpringLayout();
         quizFrame = new JFrame();
         expression = createExpression();
+
         expressionToGuess = new JLabel(expression);
+        expressionToGuess.setForeground(Main.CREAM);
+        expressionToGuess.setBackground(Color.GRAY);
         textField = new JTextField();
+        textField.setBackground(Color.DARK_GRAY);
+        textField.setForeground(Color.WHITE);
+        correct = new JLabel("Correct");
+        correct.setForeground(Main.CREAM);
+        incorrect = new JLabel("Incorrect");
+        incorrect.setForeground(Main.CREAM);
+        backButton = new JButton("Back");
+        backButton.setForeground(Main.CREAM);
+        backButton.setBackground(Color.GRAY);
+
         contentPane = quizFrame.getContentPane();
         //Sets frame size and title.
         quizFrame.setTitle("Quiz");
