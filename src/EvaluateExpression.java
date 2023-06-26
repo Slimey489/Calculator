@@ -29,15 +29,15 @@ class EvaluateExpression {
             try {
                 answer = Double.parseDouble(expression);
             } catch (Exception e){
-                if (expression.contains("^")|expression.contains("E"))
+                if (expression.contains("^")||expression.contains("E"))
                     expression = exponents.solver(expression);
-                if (!expression.contains("^") & expression.contains("*"))
+                if (!expression.contains("^") && expression.contains("*"))
                     expression = multiplication.solver(expression);
-                if (!expression.contains("^") & expression.contains("/"))
+                if (!expression.contains("^") && expression.contains("/"))
                     expression = division.solver(expression);
-                if (!expression.contains("^") & !expression.contains("/") & !expression.contains("*") & expression.contains("+"))
+                if (!expression.contains("^") && !expression.contains("/") && !expression.contains("*") && expression.contains("+"))
                     expression = addition.solver(expression);
-                if (!expression.contains("^") & !expression.contains("/") & !expression.contains("*") & expression.contains("-"))
+                if (!expression.contains("^") && !expression.contains("/") && !expression.contains("*") && expression.contains("-"))
                     expression = subtraction.solver(expression);
             }
             i++;
@@ -49,7 +49,7 @@ class EvaluateExpression {
         return expression;
     }
 
-    static class Exponents{
+    static class Exponents implements Operator{
         private String expressionToValue;
         private String leftSide;
         private String operatorLocation;
@@ -66,7 +66,7 @@ class EvaluateExpression {
             Double value1;
             String operator = "^";
             try {
-                value1 = Double.parseDouble(leftSideExponents(expression,operator));
+                value1 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
                 //TODO
                 // Add Proper error management
@@ -75,13 +75,13 @@ class EvaluateExpression {
             }
 
             try {
-                value2 = Double.parseDouble(rightSideExponents(expression,operator));
+                value2 = Double.parseDouble(rightOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0";
 
             }
             value1 = Math.pow(value1, value2);
-            expressionToReplace = leftSideExponents(expression,operator) + operator + (rightSideExponents(expression,operator));
+            expressionToReplace = leftOfOperator(expression,operator) + operator + (rightOfOperator(expression,operator));
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
 
@@ -94,7 +94,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return leftValue the numerical value on the left side of the operator
          */
-        public String leftSideExponents(String expression, String operator){
+        public String leftOfOperator(String expression, String operator){
 
             expressionToValue = StringUtils.substringBefore(expression,operator);
 
@@ -125,7 +125,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return leftValue the numerical value on the left side of the operator
          */
-        public String rightSideExponents(String expression, String operator){
+        public String rightOfOperator(String expression, String operator){
 
             operatorLocation = StringUtils.substringAfter(expression, operator);
 
@@ -153,9 +153,7 @@ class EvaluateExpression {
             return rightSide;
         }
     }
-
-
-   static class Multiplication{
+   static class Multiplication implements Operator{
         private String leftValue;
         private String expressionToValue;
         private String operatorLocation;
@@ -170,21 +168,21 @@ class EvaluateExpression {
             Double value1;
             String operator = "*";
             try {
-                value1 = Double.parseDouble(leftSideMultiplication(expression,operator));
+                value1 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0" ;
 
             }
 
             try {
-                value2 = Double.parseDouble(rightSideMultiplication(expression,operator));
+                value2 = Double.parseDouble(rightOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0";
 
             }
 
             value1 *=  value2;
-            String expressionToReplace = leftSideMultiplication(expression,operator) + operator + (rightSideMultiplication(expression,operator));
+            String expressionToReplace = leftOfOperator(expression,operator) + operator + (rightOfOperator(expression,operator));
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
 
@@ -197,7 +195,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return leftValue the numerical value on the left side of the operator
          */
-        public String leftSideMultiplication(String expression, String operator){
+        public String leftOfOperator(String expression, String operator){
 
             operatorLocation = StringUtils.substringBefore(expression, operator);
             if( !operatorLocation.contains("*")&!operatorLocation.contains("/")&!operatorLocation.contains("-")&!operatorLocation.contains("+")){
@@ -231,9 +229,9 @@ class EvaluateExpression {
         /**
          * @param expression the input expression
          * @param operator the operator being used to find the correct value
-         * @return leftValue the numerical value on the left side of the operator
+         * @return rightValue the numerical value on the right side of the operator
          */
-        public String rightSideMultiplication(String expression, String operator){
+        public String rightOfOperator(String expression, String operator){
             expressionToValue = StringUtils.substringAfter(expression,operator);
             if( !expressionToValue.contains("*")&!expressionToValue.contains("/")&!expressionToValue.contains("-")&!expressionToValue.contains("+")) {
                 rightValue = expressionToValue;
@@ -262,7 +260,7 @@ class EvaluateExpression {
             return rightValue;
         }
     }
-    static class Division{
+    static class Division implements Operator{
         private String leftValue;
         private String expressionToValue;
         private String operatorLocation;
@@ -277,20 +275,20 @@ class EvaluateExpression {
             Double value1;
             String operator = "/";
             try {
-                value1 = Double.parseDouble(leftSideDivision(expression,operator));
+                value1 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0" ;
 
             }
 
             try {
-                value2 = Double.parseDouble(rightSideDivision(expression,operator));
+                value2 = Double.parseDouble(rightOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0";
 
             }
             value1 /=  value2;
-            String expressionToReplace = leftSideDivision(expression,operator) + operator + (rightSideDivision(expression,operator));
+            String expressionToReplace = leftOfOperator(expression,operator) + operator + (rightOfOperator(expression,operator));
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
 
@@ -303,7 +301,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return leftValue the numerical value on the left side of the operator
          */
-        public String leftSideDivision(String expression, String operator){
+        public String leftOfOperator(String expression, String operator){
 
             operatorLocation = StringUtils.substringBefore(expression, operator);
             if (!operatorLocation.contains("/")&!operatorLocation.contains("-")&operatorLocation.contains("+")){
@@ -332,7 +330,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return rightValue the numerical value on the right side of the operator
          */
-        public String rightSideDivision(String expression, String operator){
+        public String rightOfOperator(String expression, String operator){
             expressionToValue = StringUtils.substringAfter(expression,operator);
 
             rightValue = StringUtils.substringBefore(expressionToValue, "/");
@@ -352,7 +350,7 @@ class EvaluateExpression {
             return rightValue;
         }
     }
-    static class Addition{
+    static class Addition implements Operator{
         private String leftValue;
         private String expressionToValue;
         private String operatorLocation;
@@ -367,20 +365,20 @@ class EvaluateExpression {
             Double value1;
             String operator = "+";
             try {
-                value2 = Double.parseDouble(leftSideAddition(expression,operator));
+                value2 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0" ;
 
             }
 
             try {
-                value1 = Double.parseDouble(rightSideAddition(expression,operator));
+                value1 = Double.parseDouble(rightOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0";
 
             }
             value1 +=  value2;
-            String expressionToReplace = leftSideAddition(expression, operator) + operator + (rightSideAddition(expression,operator));
+            String expressionToReplace = leftOfOperator(expression, operator) + operator + (rightOfOperator(expression,operator));
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
             return expression;
@@ -390,7 +388,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return leftValue the numerical value on the left side of the operator
          */
-        public String leftSideAddition(String expression, String operator){
+        public String leftOfOperator(String expression, String operator){
 
             operatorLocation = StringUtils.substringBefore(expression, operator);
 
@@ -409,7 +407,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return rightValue the numerical value on the right side of the operator
          */
-        public String rightSideAddition(String expression,String operator){
+        public String rightOfOperator(String expression, String operator){
             expressionToValue = StringUtils.substringAfter(expression,operator);
 
             rightValue = StringUtils.substringBefore(expressionToValue, "-");
@@ -423,7 +421,7 @@ class EvaluateExpression {
             return rightValue;
         }
     }
-    static class Subtraction{
+    static class Subtraction implements Operator{
         private String leftValue;
         private String expressionToValue;
         private String operatorLocation;
@@ -438,20 +436,20 @@ class EvaluateExpression {
             Double value1;
             String operator = "-";
             try {
-                value1 = Double.parseDouble(leftSideSubtraction(expression,operator));
+                value1 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0" ;
 
             }
 
             try {
-                value2 = Double.parseDouble(rightSideSubtraction(expression,operator));
+                value2 = Double.parseDouble(rightOfOperator(expression,operator));
             } catch (Exception e) {
                 return "0.0";
 
             }
             value1 -=  value2;
-            String expressionToReplace = leftSideSubtraction(expression,operator) + operator + (rightSideSubtraction(expression,operator));
+            String expressionToReplace = leftOfOperator(expression,operator) + operator + (rightOfOperator(expression,operator));
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
 
@@ -462,7 +460,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return leftValue the numerical value on the left side of the operator
          */
-        public String leftSideSubtraction(String expression, String operator){
+        public String leftOfOperator(String expression, String operator){
             operatorLocation = StringUtils.substringBefore(expression, operator);
 
             leftValue = StringUtils.substringBefore(operatorLocation, "-");
@@ -476,7 +474,7 @@ class EvaluateExpression {
          * @param operator the operator being used to find the correct value
          * @return rightValue the numerical value on the right side of the operator
          */
-        public String rightSideSubtraction(String expression, String operator){
+        public String rightOfOperator(String expression, String operator){
             expressionToValue = StringUtils.substringAfter(expression,operator);
 
             rightValue = StringUtils.substringBefore(expressionToValue, "-");
