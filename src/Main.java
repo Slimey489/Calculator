@@ -13,6 +13,8 @@ class Main {
     public JButton backButton;
     public static JTextField textField;
     public JButton clearButton;
+    public static final Color CREAM = new Color(243, 242, 224);
+
     Container objectContainer;
 
     /**
@@ -39,7 +41,7 @@ class Main {
 
         //Sets colour variables
         Color buttonBackgroundColour = Color.GRAY;
-        Color buttonForegroundColour = new Color(243, 242, 224);
+        Color buttonForegroundColour = Main.CREAM;
 
         //Setting objectContainer value
         objectContainer = frameMain.getContentPane();
