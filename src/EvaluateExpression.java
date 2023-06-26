@@ -5,20 +5,19 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Contain a method and subclasses to evaluate a string as a mathematical expression
+ * Contain a method and subclasses to evaluate a string as a mathematical expression.
  */
 class EvaluateExpression {
     Operators operators = new Operators();
 
     /**
-     * Uses the order of operations to evaluate a mathematical expression
-     * @param expression the input expression that is to be evaluated
-     * @return expression the output expression
-     * @return "Error" in case of unexpected input this will return "Error" if the loop has run 10000 times
+     * Uses the order of operations to evaluate a mathematical expression.
+     * @param expression the input expression that is to be evaluated.
+     * @return {@code expression} the output expression.
      */
     public String evaluate(String expression) {
         Double answer = null;
-        String operator = "";
+        String operator;
         int i =0;
 
         while (answer == null){
@@ -121,10 +120,6 @@ class EvaluateExpression {
                 return leftSide;
             }
             leftSide = StringUtils.substringBefore(expressionToValue, "-");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-
             return leftSide;
         }
 
@@ -153,9 +148,6 @@ class EvaluateExpression {
                 return rightSide;
             }
             rightSide = StringUtils.substringBefore(operatorLocation, "-");
-            if (!Objects.equals(rightSide, operatorLocation)){
-                return rightSide;
-            }
             return rightSide;
         }
     }

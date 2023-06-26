@@ -7,7 +7,7 @@ import java.lang.reflect.Array;
 import java.util.Objects;
 
 /**
- * Contains everthing needed to create a small quiz frame
+ * Contains everything needed to create a small quiz frame
  */
 public class Quiz {
     JFrame quizFrame;
@@ -23,7 +23,7 @@ public class Quiz {
     /**
      * @param min minimum value to be returned
      * @param max  maximum value to be returned
-     * @return a random integer with minimun value "min" and maximun value "max"
+     * @return a random integer with minimum value "min" and maximum value "max"
      */
     int randomNumber(int min, int max)
     {
@@ -32,7 +32,7 @@ public class Quiz {
     }
 
     /**
-     * @return returns a random expression with a length of up to 5 operators
+     * @return returns a random expression with a length of up to 5 operators.
      */
     private String createExpression() {
         StringBuilder result = new StringBuilder();
@@ -47,10 +47,10 @@ public class Quiz {
     }
 
     /**
-     * Creates a frame containing a text box and a two labels
+     * Creates a frame containing a text box and two labels.
      */
     public void quizFrame(){
-        //Sets initial values for variables
+        //Sets initial values for variables.
         correct = new JLabel("Correct");
         incorrect = new JLabel("Incorrect");
         backButton = new JButton("Back");
@@ -60,21 +60,21 @@ public class Quiz {
         expressionToGuess = new JLabel(expression);
         textField = new JTextField();
         contentPane = quizFrame.getContentPane();
-        //Sets frame size and title
+        //Sets frame size and title.
         quizFrame.setTitle("Quiz");
         quizFrame.setSize(200,200);
-        //Adds a action listeners
+        //Adds action listeners.
         textField.addActionListener(new Action());
         backButton.addActionListener(new Action());
-        //Sets text field size
+        //Sets text field size.
         textField.setPreferredSize(new Dimension(150,40));
-        //Sets element vertical positioning
+        //Sets element vertical positioning.
         layout.putConstraint(SpringLayout.VERTICAL_CENTER,textField,0,SpringLayout.VERTICAL_CENTER,contentPane);
         layout.putConstraint(SpringLayout.NORTH,expressionToGuess,10,SpringLayout.NORTH,contentPane);
         layout.putConstraint(SpringLayout.NORTH,correct,30,SpringLayout.NORTH,contentPane);
         layout.putConstraint(SpringLayout.NORTH,incorrect,30,SpringLayout.NORTH,contentPane);
         layout.putConstraint(SpringLayout.VERTICAL_CENTER,backButton,40,SpringLayout.VERTICAL_CENTER,contentPane);
-        //Sets element horizontal positioning
+        //Sets element horizontal positioning.
         layout.putConstraint(SpringLayout.HORIZONTAL_CENTER,textField,0,SpringLayout.HORIZONTAL_CENTER,contentPane);
         layout.putConstraint(SpringLayout.HORIZONTAL_CENTER,expressionToGuess,0,SpringLayout.HORIZONTAL_CENTER,contentPane);
         layout.putConstraint(SpringLayout.HORIZONTAL_CENTER,correct,0,SpringLayout.HORIZONTAL_CENTER,contentPane);
@@ -87,13 +87,13 @@ public class Quiz {
         contentPane.setLayout(layout);
         contentPane.setVisible(true);
         quizFrame.setVisible(true);
-        //Disables the ability to rezise the window
+        //Disables the ability to resize the window.
         quizFrame.setResizable(false);
 
     }
 
     /**
-     * Defines what happens on a action event
+     * Defines what happens on an action event.
      */
     class Action implements ActionListener{
 
