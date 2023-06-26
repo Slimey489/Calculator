@@ -5,9 +5,6 @@ import java.awt.event.ActionListener;
 import org.apache.commons.lang3.StringUtils;
 class Main {
 
-    private Dimension mainFrameSize;
-
-    private Dimension buttonSize;
     public JFrame frameMain;
     public static String expression;
     SpringLayout layout;
@@ -32,10 +29,10 @@ class Main {
         frameMain.setTitle("Calculator");
 
         //Setting mainFrame size
-        mainFrameSize = new Dimension(280,305);
+        Dimension mainFrameSize = new Dimension(280, 305);
 
         //Sets button size variable
-        buttonSize = new Dimension(60,30);
+        Dimension buttonSize = new Dimension(60, 30);
 
         //Sets text field size
         Dimension textFieldSize = new Dimension(255,80);
