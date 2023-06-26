@@ -83,16 +83,12 @@ class EvaluateExpression {
                 return "0.0";
 
             }
-            if (operator.equals("^")) {
-                value1 = Math.pow(value1, value2);
-            } else if (operator.equals("*")) {
-                value1 *= value2;
-            } else if (operator.equals("/")) {
-                value1 /= value2;
-            } else if (operator.equals("+")) {
-                value1 += value2;
-            } else if (operator.equals("-")) {
-                value1 -= value2;
+            switch (operator) {
+                case "^" -> value1 = Math.pow(value1, value2);
+                case "*" -> value1 *= value2;
+                case "/" -> value1 /= value2;
+                case "+" -> value1 += value2;
+                case "-" -> value1 -= value2;
             }
             expressionToReplace = leftOfOperator(expression,operator) + operator + (rightOfOperator(expression,operator));
             String quote = Pattern.quote(expressionToReplace);
