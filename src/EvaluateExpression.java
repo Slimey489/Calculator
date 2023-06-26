@@ -46,6 +46,7 @@ class EvaluateExpression {
                     expression = operators.solver(expression, operator);
                 }
                 }
+            // this prevents an infinite loop situation that would hang the program.
             i++;
             if (i == 10000){
                 return "Error";
@@ -65,8 +66,8 @@ class EvaluateExpression {
         private String expressionToReplace;
         @Override
         public String solver(String expression,String operator) {
-            Double value2;
-            Double value1;
+            double value2;
+            double value1;
             try {
                 value1 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
@@ -95,7 +96,7 @@ class EvaluateExpression {
             }
             expressionToReplace = leftOfOperator(expression,operator) + operator + (rightOfOperator(expression,operator));
             String quote = Pattern.quote(expressionToReplace);
-            expression = RegExUtils.replaceFirst(expression,quote,value1.toString());
+            expression = RegExUtils.replaceFirst(expression,quote, Double.toString(value1));
             return expression;
         }
 
