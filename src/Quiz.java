@@ -50,10 +50,9 @@ public class Quiz {
      * Creates a frame containing a text box and two labels.
      */
     public void quizFrame(){
-        //TODO
-        //Set element colours.
 
-        //Sets initial values for variables.
+        //Sets initial values for variables
+        // and colours them.
 
         layout = new SpringLayout();
         quizFrame = new JFrame();
