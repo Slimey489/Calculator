@@ -54,6 +54,9 @@ class EvaluateExpression {
         expression = answer.toString();
         return expression;
     }
+    /**
+     *  See documentation for  {@code Operator} for below class & methods.
+    **/
     static class Operators implements Operator{
         private String expressionToValue;
         private String leftSide;
