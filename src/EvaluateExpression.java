@@ -44,6 +44,9 @@ class EvaluateExpression {
                     operator = "-";
                     expression = operators.solver(expression, operator);
                 }
+                if (!expression.contains("^") && !expression.contains("/") && !expression.contains("*") && !expression.contains("-")) {
+                    return expression;
+                }
                 if (expression.equals("Error")){
                     return expression;
                 }
@@ -62,11 +65,13 @@ class EvaluateExpression {
      *  See documentation for  {@code Operator} for below class & methods.
     **/
     static class Operators implements Operator{
+        RightOfOperator rightOfOperator = new RightOfOperator();
         @Override
         public String solver(String expression,String operator) {
             String expressionToReplace;
             double value2;
             double value1;
+            String rightValue = "";
             try {
                 value1 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
@@ -74,9 +79,15 @@ class EvaluateExpression {
                 return expression;
 
             }
-
+            switch (operator) {
+                case "^" -> rightValue = rightOfOperator.caret(expression);
+                case "*" -> rightValue = rightOfOperator.aestrix(expression);
+                case "/" -> rightValue = rightOfOperator.slash(expression);
+                case "+" -> rightValue = rightOfOperator.plus(expression);
+                case "-" -> rightValue = rightOfOperator.dash(expression);
+            }
             try {
-                value2 = Double.parseDouble(rightOfOperator(expression,operator));
+                value2 = Double.parseDouble(rightValue);
             } catch (Exception e) {
                 expression = "Error";
                 return expression;
@@ -90,7 +101,7 @@ class EvaluateExpression {
                 case "+" -> value1 += value2;
                 case "-" -> value1 -= value2;
             }
-            expressionToReplace = leftOfOperator(expression,operator) + operator + (rightOfOperator(expression,operator));
+            expressionToReplace = leftOfOperator(expression,operator) + operator + rightValue;
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote, Double.toString(value1));
             return expression;
@@ -122,33 +133,89 @@ class EvaluateExpression {
             leftSide = StringUtils.substringBefore(expressionToValue, "-");
             return leftSide;
         }
-
-        @Override
-        public String rightOfOperator(String expression, String operator) {
-            String operatorLocation;
+        class RightOfOperator implements Operator.RightOfOperator{
+            String expressionToValue;
             String rightSide;
+            @Override
+            public String caret(String expression) {
+                expressionToValue = StringUtils.substringAfter(expression,"^");
+                rightSide = StringUtils.substringBefore(expressionToValue, "^");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "*");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "/");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "-");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "+");
+                return rightSide;
+            }
 
-            operatorLocation = StringUtils.substringAfter(expression, operator);
+            @Override
+            public String aestrix(String expression) {
+                expressionToValue = StringUtils.substringAfter(expression,"*");
+                rightSide = StringUtils.substringBefore(expressionToValue, "/");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "-");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "+");
+                return rightSide;
+            }
 
-            rightSide = StringUtils.substringBefore(operatorLocation, "^");
-            if (!Objects.equals(rightSide, operatorLocation)){
-                return rightSide;
-            }
-            rightSide = StringUtils.substringBefore(operatorLocation, "*");
-            if (!Objects.equals(rightSide, operatorLocation)){
+            @Override
+            public String slash(String expression) {
+                expressionToValue = StringUtils.substringAfter(expression,"/");
+                if (!expressionToValue.contains("/")&!expressionToValue.contains("-")&expressionToValue.contains("+")){
+                    rightSide = expressionToValue;
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "*");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "-");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "+");
                 return rightSide;
             }
 
-            rightSide = StringUtils.substringBefore(operatorLocation, "/");
-            if (!Objects.equals(rightSide, operatorLocation)){
+            @Override
+            public String plus(String expression) {
+                expressionToValue = StringUtils.substringAfter(expression,"+");
+
+                rightSide = StringUtils.substringBefore(expressionToValue, "-");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "+");
                 return rightSide;
             }
-            rightSide = StringUtils.substringBefore(operatorLocation, "+");
-            if (!Objects.equals(rightSide, operatorLocation)){
+
+            @Override
+            public String dash(String expression) {
+                expressionToValue = StringUtils.substringAfter(expression,"-");
+
+                rightSide = StringUtils.substringBefore(expressionToValue, "-");
+                if (!Objects.equals(rightSide, expressionToValue)){
+                    return rightSide;
+                }
+                rightSide = StringUtils.substringBefore(expressionToValue, "+");
                 return rightSide;
             }
-            rightSide = StringUtils.substringBefore(operatorLocation, "-");
-            return rightSide;
         }
     }
 }
