@@ -122,14 +122,14 @@ class EvaluateExpression {
                 int arrayListIndexes = 0;
 
                 expressionToValue = StringUtils.substringBefore(expression,operator);
-                for (int indexes = 0; indexes < arrayOfOperators.length ; indexes++) {
+                for (String arrayOfOperator : arrayOfOperators) {
 
-                    if (expressionToValue.contains(arrayOfOperators[indexes])){
-                        operatorsInExpression.add(arrayOfOperators[indexes]);
-                        if (operatorsInExpression.size()>1)
+                    if (expressionToValue.contains(arrayOfOperator)) {
+                        operatorsInExpression.add(arrayOfOperator);
+                        if (operatorsInExpression.size() > 1)
                             arrayListIndexes++;
                     }
-                    if (!operatorsInExpression.isEmpty()){
+                    if (!operatorsInExpression.isEmpty()) {
                         indexOfOperators.add(expressionToValue.indexOf(operatorsInExpression.get(arrayListIndexes)));
                     }
                 }
@@ -165,14 +165,14 @@ class EvaluateExpression {
                 int arrayListIndexes = 0;
 
                 expressionToValue = StringUtils.substringAfter(expression,operator);
-                for (int indexes = 0; indexes < arrayOfOperators.length ; indexes++) {
+                for (String arrayOfOperator : arrayOfOperators) {
 
-                    if (expressionToValue.contains(arrayOfOperators[indexes])){
-                        operatorsInExpression.add(arrayOfOperators[indexes]);
-                        if (operatorsInExpression.size()>1)
+                    if (expressionToValue.contains(arrayOfOperator)) {
+                        operatorsInExpression.add(arrayOfOperator);
+                        if (operatorsInExpression.size() > 1)
                             arrayListIndexes++;
                     }
-                    if (!operatorsInExpression.isEmpty()){
+                    if (!operatorsInExpression.isEmpty()) {
                         indexOfOperators.add(expressionToValue.indexOf(operatorsInExpression.get(arrayListIndexes)));
                     }
                 }
