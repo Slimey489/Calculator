@@ -1,8 +1,10 @@
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Contain a method and subclasses to evaluate a string as a mathematical expression.
@@ -62,16 +64,15 @@ class EvaluateExpression {
         return expression;
     }
     /**
-     *  See documentation for  {@code Operator} for below class & methods.
+     *  See documentation for  {@code Operator} for below classs & methods.
     **/
     static class Operators implements Operator{
-        RightOfOperator rightOfOperator = new RightOfOperator();
+        FindRightSideValue rightOfOperator = new FindRightSideValue();
         @Override
         public String solver(String expression,String operator) {
             String expressionToReplace;
             double value2;
             double value1;
-            String rightValue = "";
             try {
                 value1 = Double.parseDouble(leftOfOperator(expression,operator));
             } catch (Exception e) {
@@ -79,15 +80,9 @@ class EvaluateExpression {
                 return expression;
 
             }
-            switch (operator) {
-                case "^" -> rightValue = rightOfOperator.caret(expression);
-                case "*" -> rightValue = rightOfOperator.aestrix(expression);
-                case "/" -> rightValue = rightOfOperator.slash(expression);
-                case "+" -> rightValue = rightOfOperator.plus(expression);
-                case "-" -> rightValue = rightOfOperator.dash(expression);
-            }
+
             try {
-                value2 = Double.parseDouble(rightValue);
+                value2 = Double.parseDouble(rightOfOperator.rightSide(expression,operator));
             } catch (Exception e) {
                 expression = "Error";
                 return expression;
@@ -101,7 +96,7 @@ class EvaluateExpression {
                 case "+" -> value1 += value2;
                 case "-" -> value1 -= value2;
             }
-            expressionToReplace = leftOfOperator(expression,operator) + operator + rightValue;
+            expressionToReplace = leftOfOperator(expression,operator) + operator + rightOfOperator.rightSide(expression,operator);
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote, Double.toString(value1));
             return expression;
@@ -133,88 +128,46 @@ class EvaluateExpression {
             leftSide = StringUtils.substringBefore(expressionToValue, "-");
             return leftSide;
         }
-        class RightOfOperator implements Operator.RightOfOperator{
-            String expressionToValue;
-            String rightSide;
-            @Override
-            public String caret(String expression) {
-                expressionToValue = StringUtils.substringAfter(expression,"^");
-                rightSide = StringUtils.substringBefore(expressionToValue, "^");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
+        static class FindRightSideValue implements Operator.FindRightSideValue {
+            public Integer getMinValue(ArrayList<Integer> list) {
+                int minimumValue = list.get(0);
+                for (int i = 1; i < list.size(); i++) {
+                    if (list.get(i) < minimumValue) {
+                        minimumValue = list.get(i);
+                    }
                 }
-                rightSide = StringUtils.substringBefore(expressionToValue, "*");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
-                }
-                rightSide = StringUtils.substringBefore(expressionToValue, "/");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
-                }
-                rightSide = StringUtils.substringBefore(expressionToValue, "-");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
-                }
-                rightSide = StringUtils.substringBefore(expressionToValue, "+");
-                return rightSide;
+                return minimumValue;
             }
-
             @Override
-            public String aestrix(String expression) {
-                expressionToValue = StringUtils.substringAfter(expression,"*");
-                rightSide = StringUtils.substringBefore(expressionToValue, "/");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
-                }
-                rightSide = StringUtils.substringBefore(expressionToValue, "-");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
-                }
-                rightSide = StringUtils.substringBefore(expressionToValue, "+");
-                return rightSide;
-            }
+            public String rightSide(String expression, String operator){
+                String expressionToValue;
+                String correctOperator;
+                String rightSideValue;
+                String[] arrayOfOperators = new String[]{"^","*","/","+","-"};
+                ArrayList<String> operatorsInExpression = new ArrayList<String>();
+                ArrayList<Integer> indexOfOperators = new ArrayList<Integer>();
+                int arrayListIndexes = 0;
 
-            @Override
-            public String slash(String expression) {
-                expressionToValue = StringUtils.substringAfter(expression,"/");
-                if (!expressionToValue.contains("/")&!expressionToValue.contains("-")&expressionToValue.contains("+")){
-                    rightSide = expressionToValue;
-                    return rightSide;
-                }
-                rightSide = StringUtils.substringBefore(expressionToValue, "*");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
-                }
-                rightSide = StringUtils.substringBefore(expressionToValue, "-");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
-                }
-                rightSide = StringUtils.substringBefore(expressionToValue, "+");
-                return rightSide;
-            }
+                expressionToValue = StringUtils.substringAfter(expression,operator);
+                for (int indexes = 0; indexes < arrayOfOperators.length ; indexes++) {
 
-            @Override
-            public String plus(String expression) {
-                expressionToValue = StringUtils.substringAfter(expression,"+");
-
-                rightSide = StringUtils.substringBefore(expressionToValue, "-");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
+                    if (expressionToValue.contains(arrayOfOperators[indexes])){
+                        operatorsInExpression.add(arrayOfOperators[indexes]);
+                        if (operatorsInExpression.size()>1)
+                            arrayListIndexes++;
+                    }
+                    if (!operatorsInExpression.isEmpty()){
+                        indexOfOperators.add(expressionToValue.indexOf(operatorsInExpression.get(arrayListIndexes)));
+                    }
                 }
-                rightSide = StringUtils.substringBefore(expressionToValue, "+");
-                return rightSide;
-            }
-
-            @Override
-            public String dash(String expression) {
-                expressionToValue = StringUtils.substringAfter(expression,"-");
-
-                rightSide = StringUtils.substringBefore(expressionToValue, "-");
-                if (!Objects.equals(rightSide, expressionToValue)){
-                    return rightSide;
+                if (operatorsInExpression.isEmpty()){
+                    rightSideValue = expressionToValue;
+                    return rightSideValue;
                 }
-                rightSide = StringUtils.substringBefore(expressionToValue, "+");
-                return rightSide;
+                indexOfOperators = (ArrayList<Integer>) indexOfOperators.stream().distinct().collect(Collectors.toList());
+                correctOperator = operatorsInExpression.get(getMinValue(indexOfOperators));
+                rightSideValue = StringUtils.substringBefore(expressionToValue, correctOperator);
+                return rightSideValue;
             }
         }
     }

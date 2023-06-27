@@ -1,7 +1,9 @@
+import java.util.ArrayList;
+
 /**
  * Contains Methods that deconstruct and evaluate a mathematical expression.
  */
-public interface Operator {
+ interface Operator {
     /**
      * @param expression A mathematical expression.
      * @param operator The {@code operator} that is being solved for.
@@ -16,33 +18,21 @@ public interface Operator {
      */
     String leftOfOperator(String expression, String operator);
 
-    public interface RightOfOperator{
+    /**
+     * Finds the value on the Right side of the {@code operotor}
+     */
+    interface FindRightSideValue{
+        /**
+         * @param list containing all the values.
+         * @return minValue of the list.
+         */
+        Integer getMinValue(ArrayList<Integer> list);
         /**
          * @param expression From .solver()
-         * @param operator The {@code operator} that is being solved for.
-         * @return rightSide The value on the right side of {@code operator}.
+         * @param operator That is being solved for.
+         * @return rightSideValue of {@code operator}.
          */
-        String caret(String expression);
-        /**
-         * @param expression From .solver()
-         * @return rightSide The value on the right side of {@code operator}.
-         */
-        String aestrix(String expression);
-        /**
-         * @param expression From .solver()
-         * @return rightSide The value on the right side of {@code operator}.
-         */
-        String slash(String expression);
-        /**
-         * @param expression From .solver()
-         * @return rightSide The value on the right side of {@code operator}.
-         */
-        String plus(String expression);
-        /**
-         * @param expression From .solver()
-         * @return rightSide The value on the right side of {@code operator}.
-         */
-        String dash(String expression);
+        String rightSide(String expression,String operator);
     }
 
 }
