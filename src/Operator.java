@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 /**
  * Contains Methods that deconstruct and evaluate a mathematical expression.
  */
@@ -23,7 +22,6 @@ import java.util.ArrayList;
          */
         String leftSide(String expression,String operator);
     }
-
     /**
      * Finds the value on the Right side of the {@code operotor}
      */
@@ -40,5 +38,4 @@ import java.util.ArrayList;
          */
         String rightSide(String expression,String operator);
     }
-
 }
