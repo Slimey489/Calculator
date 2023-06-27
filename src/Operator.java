@@ -10,13 +10,19 @@ import java.util.ArrayList;
      * @return expression but with the first instance of {@code operator} being solved.
      */
     String solver(String expression,String operator);
-
-    /**
-     * @param expression From .solver().
-     * @param operator The {@code operator} that is being solved for.
-     * @return leftSide The value on the left side of {@code operator}.
-     */
-    String leftOfOperator(String expression, String operator);
+    interface FindLeftSideValue{
+        /**
+         * @param list containing all the values.
+         * @return maximumValue of the list.
+         */
+        Integer getMaxValue(ArrayList<Integer> list);
+        /**
+         * @param expression From .solver()
+         * @param operator That is being solved for.
+         * @return leftSideValue of {@code operator}.
+         */
+        String leftSide(String expression,String operator);
+    }
 
     /**
      * Finds the value on the Right side of the {@code operotor}
@@ -24,7 +30,7 @@ import java.util.ArrayList;
     interface FindRightSideValue{
         /**
          * @param list containing all the values.
-         * @return minValue of the list.
+         * @return minimumValue of the list.
          */
         Integer getMinValue(ArrayList<Integer> list);
         /**

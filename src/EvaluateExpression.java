@@ -2,7 +2,6 @@ import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -46,7 +45,7 @@ class EvaluateExpression {
                     operator = "-";
                     expression = operators.solver(expression, operator);
                 }
-                if (!expression.contains("^") && !expression.contains("/") && !expression.contains("*") && !expression.contains("-")) {
+                if (!expression.contains("^") && !expression.contains("/") && !expression.contains("*") && !expression.contains("-") && !expression.contains("+")){
                     return expression;
                 }
                 if (expression.equals("Error")){
@@ -64,17 +63,18 @@ class EvaluateExpression {
         return expression;
     }
     /**
-     *  See documentation for  {@code Operator} for below classs & methods.
+     *  See documentation for  {@code Operator} for below classes & methods.
     **/
     static class Operators implements Operator{
         FindRightSideValue rightOfOperator = new FindRightSideValue();
+        FindLeftSideValue leftOfOperator = new FindLeftSideValue();
         @Override
         public String solver(String expression,String operator) {
             String expressionToReplace;
             double value2;
             double value1;
             try {
-                value1 = Double.parseDouble(leftOfOperator(expression,operator));
+                value1 = Double.parseDouble(leftOfOperator.leftSide(expression,operator));
             } catch (Exception e) {
                 expression = "Error";
                 return expression;
@@ -96,37 +96,53 @@ class EvaluateExpression {
                 case "+" -> value1 += value2;
                 case "-" -> value1 -= value2;
             }
-            expressionToReplace = leftOfOperator(expression,operator) + operator + rightOfOperator.rightSide(expression,operator);
+            expressionToReplace = leftOfOperator.leftSide(expression,operator) + operator + rightOfOperator.rightSide(expression,operator);
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote, Double.toString(value1));
             return expression;
         }
 
-        @Override
-        public String leftOfOperator(String expression, String operator) {
-            String expressionToValue;
-            String leftSide;
+        static class FindLeftSideValue implements Operator.FindLeftSideValue {
+            public Integer getMaxValue(ArrayList<Integer> list) {
+                int maximumValue = list.get(0);
+                for (int i = 1; i < list.size(); i++) {
+                    if (list.get(i) > maximumValue) {
+                        maximumValue = list.get(i);
+                    }
+                }
+                return maximumValue;
+            }
+            public String leftSide(String expression, String operator){
+                String expressionToValue;
+                String correctOperator;
+                String leftSideValue;
+                String[] arrayOfOperators = new String[]{"^","*","/","+","-"};
+                ArrayList<String> operatorsInExpression = new ArrayList<String>();
+                ArrayList<Integer> indexOfOperators = new ArrayList<Integer>();
+                int arrayListIndexes = 0;
 
-            expressionToValue = StringUtils.substringBefore(expression,operator);
+                expressionToValue = StringUtils.substringBefore(expression,operator);
+                for (int indexes = 0; indexes < arrayOfOperators.length ; indexes++) {
 
-            leftSide = StringUtils.substringBefore(expressionToValue, "^");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
+                    if (expressionToValue.contains(arrayOfOperators[indexes])){
+                        operatorsInExpression.add(arrayOfOperators[indexes]);
+                        if (operatorsInExpression.size()>1)
+                            arrayListIndexes++;
+                    }
+                    if (!operatorsInExpression.isEmpty()){
+                        indexOfOperators.add(expressionToValue.indexOf(operatorsInExpression.get(arrayListIndexes)));
+                    }
+                }
+                if (operatorsInExpression.isEmpty()){
+                    leftSideValue = expressionToValue;
+                    return leftSideValue;
+                }
+                indexOfOperators = (ArrayList<Integer>) indexOfOperators.stream().distinct().collect(Collectors.toList());
+                //correctOperator = String.valueOf(expressionToValue.charAt(getMaxValue(indexOfOperators)));
+                correctOperator = operatorsInExpression.get(indexOfOperators.indexOf(getMaxValue(indexOfOperators)));
+                leftSideValue = StringUtils.substringAfter(expressionToValue, correctOperator);
+                return leftSideValue;
             }
-            leftSide = StringUtils.substringBefore(expressionToValue, "*");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-            leftSide = StringUtils.substringBefore(expressionToValue, "/");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-            leftSide = StringUtils.substringBefore(expressionToValue, "+");
-            if (!Objects.equals(leftSide, expressionToValue)){
-                return leftSide;
-            }
-            leftSide = StringUtils.substringBefore(expressionToValue, "-");
-            return leftSide;
         }
         static class FindRightSideValue implements Operator.FindRightSideValue {
             public Integer getMinValue(ArrayList<Integer> list) {
@@ -165,7 +181,7 @@ class EvaluateExpression {
                     return rightSideValue;
                 }
                 indexOfOperators = (ArrayList<Integer>) indexOfOperators.stream().distinct().collect(Collectors.toList());
-                correctOperator = operatorsInExpression.get(getMinValue(indexOfOperators));
+                correctOperator = operatorsInExpression.get(indexOfOperators.indexOf(getMinValue(indexOfOperators)));
                 rightSideValue = StringUtils.substringBefore(expressionToValue, correctOperator);
                 return rightSideValue;
             }
