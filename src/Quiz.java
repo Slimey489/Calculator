@@ -71,8 +71,9 @@ public class Quiz {
         backButton = new JButton("Back");
         backButton.setForeground(Main.CREAM);
         backButton.setBackground(Color.GRAY);
-
         contentPane = quizFrame.getContentPane();
+        contentPane.setBackground(Color.darkGray);
+
         //Sets frame size and title.
         quizFrame.setTitle("Quiz");
         quizFrame.setSize(200,200);
