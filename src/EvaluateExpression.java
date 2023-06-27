@@ -117,8 +117,8 @@ class EvaluateExpression {
                 String correctOperator;
                 String leftSideValue;
                 String[] arrayOfOperators = new String[]{"^","*","/","+","-"};
-                ArrayList<String> operatorsInExpression = new ArrayList<String>();
-                ArrayList<Integer> indexOfOperators = new ArrayList<Integer>();
+                ArrayList<String> operatorsInExpression = new ArrayList<>();
+                ArrayList<Integer> indexOfOperators = new ArrayList<>();
                 int arrayListIndexes = 0;
 
                 expressionToValue = StringUtils.substringBefore(expression,operator);
@@ -160,8 +160,8 @@ class EvaluateExpression {
                 String correctOperator;
                 String rightSideValue;
                 String[] arrayOfOperators = new String[]{"^","*","/","+","-"};
-                ArrayList<String> operatorsInExpression = new ArrayList<String>();
-                ArrayList<Integer> indexOfOperators = new ArrayList<Integer>();
+                ArrayList<String> operatorsInExpression = new ArrayList<>();
+                ArrayList<Integer> indexOfOperators = new ArrayList<>();
                 int arrayListIndexes = 0;
 
                 expressionToValue = StringUtils.substringAfter(expression,operator);
