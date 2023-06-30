@@ -36,6 +36,6 @@ import java.util.ArrayList;
          * @param operator That is being solved for.
          * @return rightSideValue of {@code operator}.
          */
-        String rightSide(String expression,String operator);
+        String rightSide(String expression,String operator,boolean negative);
     }
 }

@@ -24,7 +24,8 @@ class EvaluateExpression {
         while (answer == null){
             try {
                 answer = Double.parseDouble(expression);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 if (expression.contains("^") || expression.contains("E")) {
                     operator = "^";
                     expression = operators.solver(expression, operator);
@@ -51,7 +52,7 @@ class EvaluateExpression {
                 if (expression.equals("Error")){
                     return expression;
                 }
-                }
+            }
             // This prevents an infinite loop situation that would hang the program.
             i++;
             if (i == 10000){
@@ -82,7 +83,7 @@ class EvaluateExpression {
             }
 
             try {
-                value2 = Double.parseDouble(rightOfOperator.rightSide(expression,operator));
+                value2 = Double.parseDouble(rightOfOperator.rightSide(expression,operator,false));
             } catch (Exception e) {
                 expression = "Error";
                 return expression;
@@ -96,12 +97,11 @@ class EvaluateExpression {
                 case "+" -> value1 += value2;
                 case "-" -> value1 -= value2;
             }
-            expressionToReplace = leftOfOperator.leftSide(expression,operator) + operator + rightOfOperator.rightSide(expression,operator);
+            expressionToReplace = leftOfOperator.leftSide(expression,operator) + operator + rightOfOperator.rightSide(expression,operator,false);
             String quote = Pattern.quote(expressionToReplace);
             expression = RegExUtils.replaceFirst(expression,quote, Double.toString(value1));
             return expression;
         }
-
         static class FindLeftSideValue implements Operator.FindLeftSideValue {
             public Integer getMaxValue(ArrayList<Integer> list) {
                 int maximumValue = list.get(0);
@@ -112,16 +112,23 @@ class EvaluateExpression {
                 }
                 return maximumValue;
             }
-            public String leftSide(String expression, String operator){
+            public String leftSide(String expression, String operator) {
+                FindRightSideValue rightOfOperator = new FindRightSideValue();
                 String expressionToValue;
                 String correctOperator;
                 String leftSideValue;
-                String[] arrayOfOperators = new String[]{"^","*","/","+","-"};
+                StringBuilder negativeValue = new StringBuilder();
+                String[] arrayOfOperators = new String[]{"^", "*", "/", "+", "-"};
                 ArrayList<String> operatorsInExpression = new ArrayList<>();
                 ArrayList<Integer> indexOfOperators = new ArrayList<>();
                 int arrayListIndexes = 0;
 
-                expressionToValue = StringUtils.substringBefore(expression,operator);
+                expressionToValue = StringUtils.substringBefore(expression, operator);
+
+                if (expressionToValue.equals("")) {
+                    leftSideValue = rightOfOperator.rightSide(expression, operator, true);
+                    return leftSideValue;
+                }
                 for (String arrayOfOperator : arrayOfOperators) {
 
                     if (expressionToValue.contains(arrayOfOperator)) {
@@ -133,12 +140,11 @@ class EvaluateExpression {
                         indexOfOperators.add(expressionToValue.indexOf(operatorsInExpression.get(arrayListIndexes)));
                     }
                 }
-                if (operatorsInExpression.isEmpty()){
+                if (operatorsInExpression.isEmpty()) {
                     leftSideValue = expressionToValue;
                     return leftSideValue;
                 }
                 indexOfOperators = (ArrayList<Integer>) indexOfOperators.stream().distinct().collect(Collectors.toList());
-                //correctOperator = String.valueOf(expressionToValue.charAt(getMaxValue(indexOfOperators)));
                 correctOperator = operatorsInExpression.get(indexOfOperators.indexOf(getMaxValue(indexOfOperators)));
                 leftSideValue = StringUtils.substringAfter(expressionToValue, correctOperator);
                 return leftSideValue;
@@ -148,18 +154,18 @@ class EvaluateExpression {
             public Integer getMinValue(ArrayList<Integer> list) {
                 int minimumValue = list.get(0);
                 for (int i = 1; i < list.size(); i++) {
-                    if (list.get(i) < minimumValue) {
+                    if ((list.get(i) < minimumValue) && !(list.get(i) == 0)) {
                         minimumValue = list.get(i);
                     }
                 }
                 return minimumValue;
             }
             @Override
-            public String rightSide(String expression, String operator){
+            public String rightSide(String expression, String operator,boolean negative){
                 String expressionToValue;
                 String correctOperator;
                 String rightSideValue;
-                String[] arrayOfOperators = new String[]{"^","*","/","+","-"};
+                String[] arrayOfOperators = new String[]{"^","*","/","+","+-","-","--"};
                 ArrayList<String> operatorsInExpression = new ArrayList<>();
                 ArrayList<Integer> indexOfOperators = new ArrayList<>();
                 int arrayListIndexes = 0;
@@ -182,7 +188,20 @@ class EvaluateExpression {
                 }
                 indexOfOperators = (ArrayList<Integer>) indexOfOperators.stream().distinct().collect(Collectors.toList());
                 correctOperator = operatorsInExpression.get(indexOfOperators.indexOf(getMinValue(indexOfOperators)));
+                if (correctOperator.equals("+-")){
+                    correctOperator = "-";
+                } else if (correctOperator.equals("--")) {
+                    correctOperator = "+";
+                }
                 rightSideValue = StringUtils.substringBefore(expressionToValue, correctOperator);
+                boolean indexIs0 = 0 == getMinValue(indexOfOperators);
+
+                if ((correctOperator.equals("-") && indexIs0)||negative){
+                    //TODO
+                    //Fix this to work with more than one digit.
+                    //rightSideValue = "-" + expressionToValue.charAt(1);
+                    rightSideValue = "-"+rightSideValue;
+                }
                 return rightSideValue;
             }
         }

@@ -56,7 +56,7 @@ class EvaluateExpressionTest {
 
     @Test
     void evaluate_complex_multiplication() {
-        assertEquals("224.0", new EvaluateExpression().evaluate("2*2*8*7"));
+        assertEquals("8.5", new EvaluateExpression().evaluate("2*1/4+2*4"));
     }
 
     @Test
@@ -79,6 +79,10 @@ class EvaluateExpressionTest {
     @Test
     void evaluate_complex_scientific_notation() {
         assertEquals("1.000000002E9", new EvaluateExpression().evaluate("10^9+2"));
+    }
+    @Test
+    void evaluate_negatives() {
+        assertEquals("8.0", new EvaluateExpression().evaluate("2+-4+7--3"));
     }
 
 }
