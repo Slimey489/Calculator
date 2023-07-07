@@ -127,7 +127,7 @@ public class Quiz {
                     quizFrame.revalidate();
                 }
             }
-            if (e.getSource()==backButton){
+            if (e.getSource() == backButton){
                 quizFrame.dispatchEvent(new WindowEvent(quizFrame, WindowEvent.WINDOW_CLOSING));
                 SwingUtilities.invokeLater(new App());
             }
