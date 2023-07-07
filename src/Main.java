@@ -142,6 +142,7 @@ class Main {
         subtractionButton.addActionListener(new Action());
         clearButton.addActionListener(new Action());
         backButton.addActionListener(new Action());
+        textField.addActionListener(new Action());
 
         //Setting element sizes
         textField.setPreferredSize(textFieldSize);
