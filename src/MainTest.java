@@ -83,6 +83,8 @@ class EvaluateExpressionTest {
     @Test
     void evaluate_negatives() {
         assertEquals("8.0", new EvaluateExpression().evaluate("2+-4+7--3"));
+        assertEquals("1.0", new EvaluateExpression().evaluate("8-9--2"));
+        assertEquals("17.0", new EvaluateExpression().evaluate("17-3+-1--2"));
     }
 
 }
